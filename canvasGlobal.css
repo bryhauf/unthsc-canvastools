@@ -1,3 +1,533 @@
+/*******************************************/
+/*The CSS below pertains to custom classes.*/
+/*******************************************/
+
+/*adjusts the background color of side and bottom wrapper*/
+body{
+	background-color: rgba(45, 78, 49, 0.1);
+	background-image: none;
+	background-repeat: no-repeat;
+	background-position: right bottom;
+}
+
+/*adjusts the color of the menu borders from grey to white*/
+.menu-item.hover .menu-item-title {
+	border-color: #fff !important;
+}
+
+#section-tabs-header{
+	word-wrap: break-word;
+}
+
+
+/******************************************************/
+/*The CSS below pertains to the Global Navigation bar.*/
+/******************************************************/
+
+#courses_menu_item, #assignments_menu_item, #grades_menu_item, #calendar_menu_item{
+	z-index: 9999;
+}
+
+/*Bold the sub-items under newly created links*/
+.menu-item-heading{
+	font-weight: bold;
+}
+
+/*create extra spacing between header and main wrappers*/
+#section-tabs-header, #main, #right-side-wrapper{
+	padding-top: 20px !important;
+}
+
+/*add icon to Grades link*/
+#grades_menu_item .icon-check-plus:before{
+	font-size: 22px;
+	color: rgb(0,0,0);
+	/*color: rgb(0,153,0);*/
+	position: absolute;
+	height: 41px;
+	bottom: 25px;
+	padding: 0px 10px;
+	top: auto;
+	opacity: .75;
+	transition: opacity 0.5s ease;
+}
+
+/*hover effect for Grades link icon*/
+li#grades_menu_item:hover .icon-check-plus:before{
+	color: rgb(0,153,0);
+	opacity: 1;
+}
+
+/*add icon to Calendar link*/
+#calendar_menu_item .icon-calendar-day:before{
+	font-size: 22px;
+	color: rgb(0,0,0);
+	/*color: rgb(153,0,0);*/
+	position: absolute;
+	height: 41px;
+	bottom: 25px;
+	padding: 0px 20px;
+	top: auto;
+	opacity: .75;
+	transition: opacity 0.5s ease;
+}
+
+/*hover effect for Calendar link icon*/
+li#calendar_menu_item:hover .icon-calendar-day:before{
+	color: rgb(0,153,0);
+	/*color: rgb(153,0,0);*/
+	opacity: 1;
+}
+
+/*add icon to Courses link*/
+#courses_menu_item .icon-folder:before{
+	font-size: 22px;
+	color: rgb(0,0,0);
+	/*color: rgb(0,153,204);*/
+	position: absolute;
+	height: 41px;
+	bottom: 25px;
+	padding: 0px 20px;
+	top: auto;
+	transition: opacity 0.5s ease;
+	opacity: .75;
+}
+
+/*adjust icon centering if groups appears in link*/
+.icon-folder-with-groups:before{
+	padding: 0px 55px !important;
+}
+
+/*adjust icon centering if groups does not appear in link */
+.icon-folder-without-groups:before{
+	padding: 0px 25px !important;
+}
+
+/*hover effect for Courses link icon*/
+li#courses_menu_item:hover a.icon-folder:before{
+	color: rgb(0,153,0);
+	/*color: rgb(0,153,204);*/
+	opacity: 1;
+}
+
+/*add icon to Resources link*/
+#resources_menu_item .icon-collection-save:before{
+	font-size: 22px;
+	color: rgb(0,0,0);
+	/*color: rgb(255,204,51);*/
+	position: absolute;
+	height: 41px;
+	bottom: 25px;
+	padding: 0px 25px;
+	top: auto;
+	transition: opacity 0.5s ease;
+	opacity: .75;
+}
+
+/*hover effect for Resources link icon*/
+li#resources_menu_item:hover a.icon-collection-save:before{
+	color: rgb(0,153,0);
+	/*color: rgb(255,204,51);*/
+	opacity: 1;
+}
+
+/*add icon to Support link*/
+#support_menu_item .icon-question:before{
+	font-size: 22px;
+	color: rgb(0,0,0);
+	position: absolute;
+	height: 41px;
+	bottom: 22.5px;
+	padding: 0px 20px;
+	top: auto;
+	transition: opacity 0.5s ease;
+	opacity: .75;
+}
+
+/*hover effect for Support link icon*/
+li#support_menu_item:hover .icon-question:before{
+	color: rgb(0,153,0);
+	/*color: rgb(0,0,0);*/
+	opacity: 1;
+}
+
+
+/* Replace the gray background with something that matches your colors.  You can use .pngs with alpha transparency. If you don't use an image, you need to remove ours*/
+/*Image size used is width 8px, height 117px*/
+#header { 
+  /*background: url("https://web.unthsc.edu/images/canvas/header_bg.jpg") repeat-x scroll left center transparent;*/
+  background: none repeat scroll 0% 0% #FFF;
+  box-shadow: 1px 1px 30px 5px rgba(0, 0, 0, 0.2);
+}
+
+#header-inner{
+	padding-top: 56px;
+}
+
+/*Replace the canvas logo with your University logo.*/
+#header-logo, #header.no-user #header-logo{
+  background: url("https://canvastools.unthsc.edu/global/images/UNTHSC_large.png") no-repeat scroll 0 100% transparent !important;
+  background-size: 250px 40px !important;
+  top: auto;
+  bottom: 20px;
+  height: 40px;
+  left: 15px;
+  width: 250px;
+  z-index: 1; /*this places your logo ontop so that the whole area of the logo can be clickable. Without this, only half the logo is clickable*/
+}
+
+#header.no-user #header-logo {
+  background: url("https://canvastools.unthsc.edu/global/images/UNTHSC.png") no-repeat scroll 0 0 transparent;
+  background-size: 44px 36px;
+  top:4px;
+  bottom: 0px;
+  height: 45px;
+  left: 15px;
+  z-index: 1; /*this places your logo ontop so that the whole area of the logo can be clickable. Without this, only half the logo is clickable*/
+}
+
+
+/*If you replace the left canvas logo with the University logo, this will "move" the Canvas logo to the right side of the screen. This is the red circle with white lettering displayed on the right side of the navigation bar.*/
+#header-logo-secondary {
+  background: url("https://canvastools.unthsc.edu/global/images/Canvas_byinstructure_color_web.png") no-repeat scroll right center transparent;
+  background-size: 165px 40px;
+  bottom: 15px;
+  height: 40px;
+  position: absolute;
+  right: 20px;
+  width: 170px;
+  display: block;
+}
+
+/*Make the Canvas logo disappear when window is resized below 1075px*/
+@media screen and (max-width: 1075px) {
+	#header-logo-secondary {
+		display: none;
+	}
+}
+
+
+/*If your logo is bigger, you can make room by moving the Global navigation links (Courses, Assignments, Grades, Calendar)*/
+#menu { 
+min-width: 700px;
+margin-left: 325px;
+margin-right: 15px;
+ } /*175px is the default value*/
+ 
+.menu-item .menu-item-title, .menu-item .menu-item-no-drop{
+	text-shadow: none;
+	color: #000;
+	font-weight: 600;
+}
+
+/*Change the background color of the identity bar (the area that says "Name Inbox Settings Logout Help).*/
+#identity {
+	background-color: #007D3C;
+	background-image: -moz-linear-gradient(top, #35842C, #006430);
+	background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#35842C), to(#006430));
+	background-image: -webkit-linear-gradient(top, #35842C, #006430);
+	background-image: -o-linear-gradient(top, #35842C, #006430);
+	background-image: linear-gradient(to bottom, #35842C, #006430);
+	background-repeat: repeat-x;
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#FF35842C', endColorstr='#FF006430', GradientType=0);
+  /*background-color: #00853E;*/
+}
+
+/*Change the text color of the links on the identity bar (the area that says "Name Inbox Settings Logout Help).*/
+#identity a { color: #fff; }
+
+/*Change the color of the circle around the number of unread inbox messages*/
+/*#identity .inbox a .unread-messages-count {
+	background-color: #00CC00;
+}*/
+
+/*Changes color of text/links in the Help navigation*/
+/*#identity #identity-help-container a { color: #fff; }*/
+
+/*Change the color of the Global Navigation links (courses, assignments, grades, calendar). If the text looks fuzzy, remove the text shadow.*/
+/*.menu-item .menu-item-title, .menu-item .menu-item-no-drop {
+  color: #FAFBF4;
+  text-shadow: none;
+}*/
+
+
+/*****************************************************/
+/*The CSS below pertains to the initial Login Screen.*/
+/*Template A v1.0 (mobile ready) by Bryan Hauf********/
+/*UNT Health Science Center bryan.hauf@unthsc.edu*****/
+/*****************************************************/
+
+
+/*login box. Changing this image changes the background of the whole login box. Dimensions for image is width 665px, height 435px. Adjust these to your liking.*/
+#modal-box.login-box { background: url("https://canvastools.unthsc.edu/global/images/login-bg.jpg") no-repeat !important; }
+
+
+/*Set "background:display" to "background:none" to remove the extra canvas logo*/
+ body.modal #modal-box.login-box h1{ 
+ background: none;
+}
+ 
+
+/*Resize the login box to fit my image*/
+ body.modal #modal-box.login-box { 
+ height: 373px; /*Using the height from the login box backgrouhnd image above*/
+ width: 665px; /*Using the width from the login box background image above*/
+ padding: 0px;
+ }
+
+
+/*Change the color of the login button*/
+ body.modal #modal-box .btn-primary, body.modal #login-box .btn-primary {
+ border-color: #174A7C;
+ background-color: rgb(43, 136, 54) !important; /*This needs to be the same color as the second rgb value on the line below*/
+ background-image: linear-gradient(to bottom, rgb(57, 181, 74), rgb(43, 136, 54)); /*this is a top to bottom gradient. I suggest using a lighter to darker color, but not much variation. If you want the button to be blue (default), comment out or completey remove this section.*/
+ }
+ 
+/*Change the color of the text "Stay signed in" under the username box. */
+ #modal-box .login-options {
+ color: rgb(57, 181, 74) !important; 
+ }
+
+/*Change the color of 'don't know your password'*/
+ body.modal #modal-box.login-box a.forgot_password_link { color: #FFF !important; }
+
+/*Change the position of the login box (username, password, stay signed in/don't know your password?, login button). Increasing the negative value will move the box further up the page. Decreasing to zero will move it closer to the bottom of the page.*/
+ /*body.modal #modal-box.login-box form { 
+ margin-top:-100px;
+ }*/
+
+/*Changes the background color of the flash notice. This is what you see at the top of the page when you login. */
+ #flash_notice_message, #flash_error_message { background-color: #8DC34B !important; } 
+
+/*changes the width of the flash notice to align with the width of the login box*/
+ #unauthorized_holder{
+	width: 665px; /*This width should match the width of the resized login box*/
+}
+
+/***********************************************/
+/*The CSS below pertains to Course Template #1.*/
+/***********************************************/
+
+#templateA{
+	margin: 0 auto;
+	width: 100%;
+	text-align:center;
+}
+
+#templateA h2{
+	color: #008000;
+	}
+	
+#templateABanner{
+	margin: 0 auto;
+}
+
+#templateABanner img{
+	width: 100%;
+	box-shadow: 5px 5px 20px #888888;
+	border-radius: 15px;
+}
+
+#templateA-sub-container{
+	margin-top: 1.81%; 
+	margin-bottom: 1.81%; 
+	width: 100%; 
+	text-align: center;	
+}
+
+#templateA-course-info{
+	display: inline-block;
+	width: 100%; 
+	min-width: 250px; 
+	vertical-align: top; 
+	text-align: left; 
+	margin-left: 1.81%;
+	margin-right: 1.81%;
+}
+
+#templateA-ModuleMenu{
+	margin-top: 1.81%; 
+	margin-bottom: 1.81%; 
+	width: 100%; 
+	text-align: center;
+	line-height: 100%;
+}
+
+.templateA-Module{
+	display: inline-block; 
+	margin: 0.5% 0.1% 0.5% 0.1%; 
+	padding: 0;
+	width: 100%;
+	min-width: 165px;
+	height: 85px;
+	text-align: left;
+	border: 1px solid #999;
+	border-radius: 10px; 
+}
+
+.templateA-Module:nth-of-type(1){
+		background-color: #9e9862; /* Old browsers */
+		background-image: linear-gradient(to bottom, #9b9147 0%,#aaa261 50%,#a8a386 100%); /* W3C */
+		opacity: 1;
+		transition: opacity 0.5s ease;
+		}
+		
+		.templateA-Module:nth-of-type(1):hover{
+			opacity: .9;			
+		}
+		
+		.templateA-Module:nth-of-type(2){
+			background-color: #61739b; /* Old browsers */
+			background-image: linear-gradient(to bottom, #466099 0%,#6876a8 50%,#83abd3 100%); /* W3C */
+			opacity: 1;
+			transition: opacity 0.5s ease;
+		}
+		
+		.templateA-Module:nth-of-type(2):hover{
+			opacity: .9;			
+		}
+		
+		.templateA-Module:nth-of-type(3){
+			background-color: #a06a65; /* Old browsers */
+			background-image: linear-gradient(to bottom, #9e554f 0%,#aa6663 51%,#d69795 100%); /* W3C */
+			opacity: 1;
+			transition: opacity 0.5s ease;
+		}
+		
+		.templateA-Module:nth-of-type(3):hover{
+			opacity: .9;			
+		}
+		
+		.templateA-Module:nth-of-type(4){
+			background-color: #6b9e65; /* Old browsers */
+			background-image: linear-gradient(to bottom, rgb(48,124,47) 0%,rgb(102,170,92) 51%,rgb(153,211,146) 100%); /* W3C */
+			opacity: 1;
+			transition: opacity 0.5s ease;
+		}
+		
+		.templateA-Module:nth-of-type(4):hover{
+			opacity: .9;			
+		}
+		
+		.templateA-Module:nth-of-type(5){
+			background-color: #000;
+			background-image: linear-gradient(to bottom,  #000000 1%,#5b5b5b 50%,#878787 100%); /* W3C */
+			opacity: 1;
+			transition: opacity 0.5s ease;
+
+		}
+		
+		.templateA-Module:nth-of-type(5):hover{
+			opacity: .9;
+		}
+
+.templateA-Module p{
+	margin: 0 0 0 -5%;
+	padding: 0;
+	background-image: url(images/right_arrow.png);
+	background-repeat: no-repeat;
+	background-position: right center;
+	background-size: 30px 30px;
+	width: 100%;
+	height: 85px;
+	display: table;
+}
+
+.templateA-Module a{
+	color: #fff;
+	width: 100%;
+	padding: 0 18% 0 15%;
+	margin: 0;
+	/*box-shadow: 2px 2px 20px #999 inset;*/
+	font-style: normal;
+	text-decoration: none;
+	text-shadow: 1px 1px #000;
+	font-size: large;
+	vertical-align: middle;
+	display: table-cell;
+	height: 85px;
+	border-radius: 10px; 
+}
+
+#templateA-IntroMedia{
+	margin-top: 1.81%; 
+	margin-bottom: 1.81%;
+	position: relative; 
+	width: 100%; 
+	text-align: center;
+	height: 0;
+	max-height: 480px;
+	padding-bottom: 56.25%
+}
+
+#templateA-IntroMedia iframe{
+	width: 63%;
+	height: 49.45%;
+}
+
+@media only screen and (min-width: 300px) and (max-width: 1304px)
+	{
+		#templateA-ModuleMenu{
+			line-height: 120%;
+		}
+		
+		.templateA-Module{
+			height: 55px;
+		}
+		.templateA-Module p{
+			height: 55px;
+		}
+		
+		.templateA-Module a{
+			padding: 0 13% 0 8%;
+			height: 55px;
+		}
+	}
+	
+	
+@media screen and (min-width: 1305px) and (max-width: 1568px)
+	{
+
+		#templateA-course-info{
+			max-width: 45%;
+		}
+		
+		div#templateA-course-info:nth-child(-n+1){
+			padding-right: 1.81%;
+			border-right: 1px solid #e9ebea;
+		}
+
+		#templateA-ModuleMenu{
+			line-height: 135%;
+		}
+		
+		.templateA-Module{
+			max-width: 185px;
+		}
+}
+
+@media screen and (min-width: 1569px){
+
+		#templateA-course-info{
+			max-width: 470px;
+		}
+
+		div#templateA-course-info:nth-child(-n+1){
+			padding-right: 1.81%;
+			border-right: 1px solid #e9ebea;
+		}
+
+		#templateA-ModuleMenu{
+			line-height: 135%;
+		}
+		
+		.templateA-Module{
+			max-width: 185px;
+		}
+
+}
+
+
 /************************************************************/
 /**************                                **************/
 /**************       KENNETHWARE STYLING      **************/
@@ -1227,3 +1757,220 @@
 /**************    END KENNETHWARE THEMES / CODE   ********************/
 /**************                                    ********************/
 /**********************************************************************/
+
+/**************************************************/
+/*****BEGIN UNTHSC CUSTOM TOOLS CUSTOMIZATIONS*****/
+/**************************************************/
+
+  /*********************************************************************/
+  /******** FP: HORIZONTAL NAV THEME ********************************/
+
+	#kl_wrapper.kl_fp_horizontal_nav_2 #kl_navigation { background: #006430 !important; /* Old browsers */
+	background: -moz-linear-gradient(top, #006430 0%, #008e1a 86%, #00a04a 100%)!important; /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#006430), color-stop(86%,#008e1a), color-stop(100%,#00a04a)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top, #006430 0%,#008e1a 86%,#00a04a 100%) !important; /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top, #006430 0%,#008e1a 86%,#00a04a 100%) !important; /* Opera 11.10+ */
+	background: -ms-linear-gradient(top, #006430 0%,#008e1a 86%,#00a04a 100%) !important; /* IE10+ */
+	background: linear-gradient(to bottom, #006430 0%,#008e1a 86%,#00a04a 100%) !important; /* W3C */
+	border-bottom-left-radius: 10px;
+	border-bottom-right-radius: 10px;
+	border-bottom: 1px solid #FFF;
+	border-left: 1px solid #FFF;
+	border-right: 1px solid #FFF;  }
+	
+  /*********************************************************************/
+  /******** FP: PANEL NAV THEME ********************************/
+	
+	#kl_wrapper.kl_fp_horizontal_nav_2 #kl_banner, #kl_wrapper.kl_fp_panel_nav_2 #kl_banner { 
+	border-top-left-radius: 10px;
+	border-top-right-radius: 10px;
+	border-top: 1px solid #006430;
+	border-left: 1px solid #006430;
+	border-right: 1px solid #006430;
+	background: #006430 !important; /* Old browsers */
+	background: -moz-linear-gradient(top, #006430 0%, #008e1a 86%, #00a04a 100%) !important; /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#006430), color-stop(86%,#008e1a), color-stop(100%,#00a04a)) !important; /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top, #006430 0%,#008e1a 86%,#00a04a 100%) !important; /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top, #006430 0%,#008e1a 86%,#00a04a 100%) !important; /* Opera 11.10+ */
+	background: -ms-linear-gradient(top, #006430 0%,#008e1a 86%,#00a04a 100%) !important; /* IE10+ */
+	background: linear-gradient(to bottom, #006430 0%,#008e1a 86%,#00a04a 100%) !important; /* W3C */
+  }
+  
+	#kl_wrapper.kl_fp_horizontal_nav_2 #kl_banner #kl_banner_left, #kl_wrapper.kl_fp_panel_nav_2 #kl_banner #kl_banner_left 
+	{border-right: hidden !important; width: 100% !important; height: 30px !important; }
+	/*{border-right: 5px solid #fff; float: left; width: 100px; height: 72px; display: block; font-size: 1.2em; }*/
+	
+	#kl_wrapper.kl_fp_horizontal_nav_2 #kl_banner #kl_banner_left .kl_mod_text, #kl_wrapper.kl_fp_panel_nav_2 #kl_banner #kl_banner_left .kl_mod_text 
+	{padding: 0px 5px 0px 22px !important; font-size: 18px !important; text-align: left !important; display: inline-block !important; width: auto !important;}
+	/*{width: 100%; padding: 9px 0 1px; display: block; font-size: 24px; line-height: 26px; text-align: center;}*/
+	
+	#kl_wrapper.kl_fp_horizontal_nav_2 #kl_banner #kl_banner_left .kl_mod_num, #kl_wrapper.kl_fp_panel_nav_2 #kl_banner #kl_banner_left .kl_mod_num 
+	{width: auto !important; padding: 0px 22px 0px 5px !important; display: inline-block !important; font-size: 18px !important; text-align: left !important;}
+	/*{width: 100%; padding: 3px 0 7px; display: none; font-size: 17px; line-height: 26px; text-align: center;}*/
+	
+	#kl_wrapper.kl_fp_horizontal_nav_2 #kl_banner #kl_banner_right, #kl_wrapper.kl_fp_panel_nav_2 #kl_banner #kl_banner_right 
+	{padding: 0px 22px 3px !important; letter-spacing: .7px !important; display: inline !important;}
+	/*{display: flex; padding: 7px 10px 3px; line-height: 26px; letter-spacing: 0.3px; font-size: 25px; max-height: 62px; overflow: hidden; text-overflow: ellipsis;}*/
+		
+	#kl_wrapper.kl_fp_panel_nav_2 #kl_navigation {color: #006430 !important; background-color: none !important; }
+	
+	#kl_wrapper.kl_fp_horizontal_nav_2 #kl_navigation li:last-child {background:none !important; }
+  
+  /*********************************************************************/
+  /******** FP: SQUARES 1:1 RATIO THEME ********************************/  
+
+	#kl_wrapper.kl_fp_squares_1x1 #kl_banner #kl_banner_left .kl_mod_text {background-color: #49a942 !important; color: #000 !important; }
+	#kl_wrapper.kl_fp_squares_1x1 #kl_banner #kl_banner_left .kl_mod_num {background-color: #000 !important; color: #49a942 !important;  }
+	#kl_wrapper.kl_fp_squares_1x1 #kl_banner #kl_banner_right {background-color: #006430 !important;}
+	
+  /*********************************************************************/
+  /**** FP & CP: FLAT SECTIONS THEME ***********************************/
+
+  /* FP */
+
+	#kl_wrapper.kl_fp_flat_sections #kl_banner {background: #006430 !important; /* Old browsers */
+	background: -moz-linear-gradient(top, #006430 0%, #008e1a 86%, #00a04a 100%) !important; /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#006430), color-stop(86%,#008e1a), color-stop(100%,#00a04a)) !important; /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top, #006430 0%,#008e1a 86%,#00a04a 100%) !important; /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top, #006430 0%,#008e1a 86%,#00a04a 100%) !important; /* Opera 11.10+ */
+	background: -ms-linear-gradient(top, #006430 0%,#008e1a 86%,#00a04a 100%) !important; /* IE10+ */
+	background: linear-gradient(to bottom, #006430 0%,#008e1a 86%,#00a04a 100%) !important; /* W3C */}
+
+	#kl_wrapper.kl_fp_flat_sections #kl_navigation,
+  	#kl_wrapper.kl_flat_sections #kl_navigation {background: #006430 !important; /* Old browsers */
+	background: -moz-linear-gradient(top, #006430 0%, #008e1a 86%, #00a04a 100%) !important; /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#006430), color-stop(86%,#008e1a), color-stop(100%,#00a04a)) !important; /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top, #006430 0%,#008e1a 86%,#00a04a 100%) !important; /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top, #006430 0%,#008e1a 86%,#00a04a 100%) !important; /* Opera 11.10+ */
+	background: -ms-linear-gradient(top, #006430 0%,#008e1a 86%,#00a04a 100%) !important; /* IE10+ */
+	background: linear-gradient(to bottom, #006430 0%,#008e1a 86%,#00a04a 100%) !important; /* W3C */}
+	
+  /*********************************************************************/
+  /***** FP & CP COLORED HEADINGS THEME  *******************************/
+  
+  /* FP */
+	#kl_wrapper.kl_fp_colored_headings #kl_banner { background: #006430 !important; /* Old browsers */
+	background: -moz-linear-gradient(top, #006430 0%, #008e1a 86%, #00a04a 100%) !important; /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#006430), color-stop(86%,#008e1a), color-stop(100%,#00a04a)) !important; /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top, #006430 0%,#008e1a 86%,#00a04a 100%) !important; /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top, #006430 0%,#008e1a 86%,#00a04a 100%) !important; /* Opera 11.10+ */
+	background: -ms-linear-gradient(top, #006430 0%,#008e1a 86%,#00a04a 100%) !important; /* IE10+ */
+	background: linear-gradient(to bottom, #006430 0%,#008e1a 86%,#00a04a 100%) !important; /* W3C */ }
+	
+	#kl_wrapper.kl_fp_colored_headings #kl_navigation,
+	#kl_wrapper.kl_colored_headings #kl_navigation { background: #006430 !important; /* Old browsers */
+	background: -moz-linear-gradient(top, #006430 0%, #008e1a 86%, #00a04a 100%) !important; /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#006430), color-stop(86%,#008e1a), color-stop(100%,#00a04a)) !important; /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top, #006430 0%,#008e1a 86%,#00a04a 100%) !important; /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top, #006430 0%,#008e1a 86%,#00a04a 100%) !important; /* Opera 11.10+ */
+	background: -ms-linear-gradient(top, #006430 0%,#008e1a 86%,#00a04a 100%) !important; /* IE10+ */
+	background: linear-gradient(to bottom, #006430 0%,#008e1a 86%,#00a04a 100%) !important; /* W3C */ }
+	
+  /*********************************************************************/
+  /******** FP: CIRCLES 1:1 RATIO THEME ********************************/
+
+	#kl_wrapper.kl_fp_circles_1x1 #kl_navigation ul li a { background: #006430 !important; /* Old browsers */
+	background: -moz-linear-gradient(top, #006430 0%, #008e1a 86%, #00a04a 100%) !important; /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#006430), color-stop(86%,#008e1a), color-stop(100%,#00a04a)) !important; /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top, #006430 0%,#008e1a 86%,#00a04a 100%) !important; /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top, #006430 0%,#008e1a 86%,#00a04a 100%) !important; /* Opera 11.10+ */
+	background: -ms-linear-gradient(top, #006430 0%,#008e1a 86%,#00a04a 100%) !important; /* IE10+ */
+	background: linear-gradient(to bottom, #006430 0%,#008e1a 86%,#00a04a 100%) !important; /* W3C */}
+	
+	#kl_wrapper.kl_fp_circles_1x1 #kl_banner #kl_banner_left { background: #000 !important; color: #fff !important; }
+	
+	
+  /*********************************************************************/
+  /******** CP: CUSTOMIZATIONS ********************************/  
+
+	#kl_tools { height: 565px; overflow-x: auto;}
+	
+	#kl_wrapper.kl_fp_horizontal_nav_2 #kl_banner_image img { width: 100% !important; }
+	
+	#kl_wrapper.kl_fp_panel_nav_2 #kl_navigation ul li a {color: #006430 !important; } 
+	
+	#kl_wrapper.kl_bookmark #kl_banner { background-color: #006430 !important; }
+	
+	#kl_wrapper.kl_box_left #kl_banner #kl_banner_left {background: #006430 !important;}
+	
+	#kl_wrapper.kl_square_right #kl_banner_left {background: #006430 !important; }
+	#kl_wrapper.kl_square_right_2 h2 {background: #006430 !important;}
+	#kl_wrapper.kl_square_right_3 h2 {background: #006430 !important;}
+	
+	#kl_wrapper.kl_apple #kl_banner { background: #006430 !important; }
+	#kl_wrapper.kl_apple #kl_banner #kl_banner_left .kl_mod_num { color: #006430 !important; }
+	
+	
+	#kl_wrapper.kl_emta #kl_banner h2 { background-color: #006430 !important; }
+	#kl_wrapper.kl_emta #kl_banner #kl_banner_bottom #kl_description { background: #006430 !important; }
+	
+	#kl_wrapper #kl_modules .ui-tabs-active {background: #006430 !important; }
+
+  /*********************************************************************/
+  /******** CP: ROUNDED INSET UPDATE ********************************/  
+
+	#kl_wrapper.kl_rounded_inset #kl_banner { 
+	background: #006430 !important; /* Old browsers */
+	background: -moz-linear-gradient(top, #006430 0%, #008e1a 86%, #00a04a 100%)!important; /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#006430), color-stop(86%,#008e1a), color-stop(100%,#00a04a)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top, #006430 0%,#008e1a 86%,#00a04a 100%) !important; /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top, #006430 0%,#008e1a 86%,#00a04a 100%) !important; /* Opera 11.10+ */
+	background: -ms-linear-gradient(top, #006430 0%,#008e1a 86%,#00a04a 100%) !important; /* IE10+ */
+	background: linear-gradient(to bottom, #006430 0%,#008e1a 86%,#00a04a 100%) !important; /* W3C */}
+	
+	#kl_wrapper.kl_rounded_inset #kl_banner,
+	#kl_wrapper.kl_rounded_inset_2 #kl_banner,
+	#kl_wrapper.kl_rounded_inset_3 #kl_banner { /*border-top-right-radius: 10px; border-top-left-radius: 10px; border-bottom-right-radius: 0px !important; border-bottom-left-radius: 0px !important;*/ box-shadow: 5px 5px 5px #ccc !important; height: 5.5em !important; margin-bottom: 25px !important; }
+	#kl_wrapper.kl_rounded_inset h2,
+	#kl_wrapper.kl_rounded_inset_2 h2,
+	#kl_wrapper.kl_rounded_inset_3 h2 { border-top-right-radius: none !important; border-bottom-right-radius: none !important; border: none !important; border-left: none; margin: 0; font-weight: normal; background: none !important; color: #fff !important;}
+	#kl_wrapper.kl_rounded_inset #kl_banner_left,
+	#kl_wrapper.kl_rounded_inset_2 #kl_banner_left,
+	#kl_wrapper.kl_rounded_inset_3 #kl_banner_left { height: 30px !important; width: 100% !important; display: block !important; float: left !important; }
+	#kl_wrapper.kl_rounded_inset .kl_mod_num,
+	#kl_wrapper.kl_rounded_inset_2 .kl_mod_num,
+	#kl_wrapper.kl_rounded_inset_3 .kl_mod_num, #kl_wrapper.kl_rounded_inset .kl_mod_text,
+	#kl_wrapper.kl_rounded_inset_2 .kl_mod_text,
+	#kl_wrapper.kl_rounded_inset_3 .kl_mod_text { display: inline-block !important; width: auto !important; font-size: 18px !important; }
+	#kl_wrapper.kl_rounded_inset .kl_mod_text,
+	#kl_wrapper.kl_rounded_inset_2 .kl_mod_text,
+	#kl_wrapper.kl_rounded_inset_3 .kl_mod_text { margin-left: 7px !important; }
+	#kl_wrapper.kl_rounded_inset .kl_mod_num:after,
+	#kl_wrapper.kl_rounded_inset_2 .kl_mod_num:after,
+	#kl_wrapper.kl_rounded_inset_3 .kl_mod_num:after { content: ":"; }
+	#kl_wrapper.kl_rounded_inset #kl_banner_right,
+	#kl_wrapper.kl_rounded_inset_2 #kl_banner_right,
+	#kl_wrapper.kl_rounded_inset_3 #kl_banner_right { margin-left: 17px !important; display: inline !important; overflow: hidden !important; }
+	#kl_wrapper.kl_rounded_inset h3,
+	#kl_wrapper.kl_rounded_inset_2 h3,
+	#kl_wrapper.kl_rounded_inset_3 h3 { width: 100% !important; border-right: none !important; border-bottom-right-radius: 0px !important; border-top-right-radius: 0px !important; /*text-transform: uppercase; border: 1px solid #8A8A8A; border-left: none;  width: 90%;*/  }
+
+/*
+#kl_wrapper.kl_fp_horizontal_nav_2 #kl_banner h2 { line-height: 26px !important;; font-size: 26px !important;; display: block !important;; }
+#kl_wrapper.kl_fp_horizontal_nav_2 #kl_banner #kl_banner_left {float: left !important;; width: 100% !important;; height: 30px !important;; display: block !important;; font-size: 1.2em !important;; }
+#kl_wrapper.kl_fp_horizontal_nav_2 #kl_banner #kl_banner_left .smu_mod_text {padding: 0px 22px 1px !important;; display: block !important;; font-size: 18px !important;; line-height: 26px !important;; text-align: left !important;;}
+#kl_wrapper.kl_fp_horizontal_nav_2 #kl_banner #kl_banner_right {display: flex !important;; padding: 0px 22px 3px !important;; line-height: 26px !important;; letter-spacing: .7px !important;; font-size: 25px !important;; max-height: 62px !important;; overflow: hidden !important;; text-overflow: ellipsis !important;;}*/
+
+  /*********************************************************************/
+  /******** UNTHSC: CUSTOM CLASSES ********************************/ 
+
+	.unt-header-bg{
+		background: -moz-linear-gradient(left,  rgba(255,255,255,1) 0%, rgba(255,255,255,1) 53%, rgba(255,255,255,0) 100%); /* FF3.6+ */
+		background: -webkit-gradient(linear, left top, right top, color-stop(0%,rgba(255,255,255,1)), color-stop(53%,rgba(255,255,255,1)), color-stop(100%,rgba(255,255,255,0))); /* Chrome,Safari4+ */
+		background: -webkit-linear-gradient(left,  rgba(255,255,255,1) 0%,rgba(255,255,255,1) 53%,rgba(255,255,255,0) 100%); /* Chrome10+,Safari5.1+ */
+		background: -o-linear-gradient(left,  rgba(255,255,255,1) 0%,rgba(255,255,255,1) 53%,rgba(255,255,255,0) 100%); /* Opera 11.10+ */
+		background: -ms-linear-gradient(left,  rgba(255,255,255,1) 0%,rgba(255,255,255,1) 53%,rgba(255,255,255,0) 100%); /* IE10+ */
+		background: linear-gradient(to right,  rgba(255,255,255,1) 0%,rgba(255,255,255,1) 53%,rgba(255,255,255,0) 100%); /* W3C */
+		height: 42px !important;
+	}
+	
+	.unt-header-bg img{
+		position: absolute;
+		right: 0px;
+		z-index:-1;
+		height: 42px;
+	}
+
+/**************************************************/
+/******END UNTHSC CUSTOM TOOLS CUSTOMIZATIONS******/
+/**************************************************/
