@@ -65,16 +65,16 @@
 //////////////////////////////////////////////////////////////////
 //Parse Course Number - It is stored in the variable "coursenum"//
 //////////////////////////////////////////////////////////////////
-//var coursenum = null;
-//(function() {
-//	var matches = location.pathname.match(/\/courses\/(.*)/);
-//	if (!matches) return;
-//	coursenum = matches[1];
-//	var killspot = coursenum.indexOf("/",0); 
-//	if (killspot >= 0) {
-//		coursenum = coursenum.slice(0, killspot);
-//	}
-//}());
+var coursenum = null;
+(function() {
+	var matches = location.pathname.match(/\/courses\/(.*)/);
+	if (!matches) return;
+	coursenum = matches[1];
+	var killspot = coursenum.indexOf("/",0); 
+	if (killspot >= 0) {
+		coursenum = coursenum.slice(0, killspot);
+	}
+}());
 
 
 /////////////////////////////////////////////////////
@@ -174,6 +174,8 @@ if ($("#left-side").length>0 && location.pathname.match(/\/courses\/(.*)/)){
 	$( "ul#section-tabs").find("li > a.outcomes").addClass("icon-star");
 	$( "ul#section-tabs").find("li > a.pages").addClass("icon-document");
 	$( "ul#section-tabs").find("li > a.settings").addClass("icon-settings");
+	$( "ul#section-tabs").find("li > a:contains('Proctortack')").addClass("icon-lock");
+	$( "ul#section-tabs").find("li > a:contains('Proctortrack')").addClass("icon-lock");
 }
 
 (function() {
@@ -187,7 +189,6 @@ if ($("#left-side").length>0 && location.pathname.match(/\/courses\/(.*)/)){
 	$("#resources_menu_item > a.menu-item-title").addClass("icon-collection-save");
 	$("#support_menu_item > a.menu-item-title").addClass("icon-question");
 }());
-
 
 /*jslint browser: true, sloppy: false, eqeq: false, vars: false, maxerr: 50, indent: 4, plusplus: true */
 /*global $, jQuery, alert, console, tinyMCE */
@@ -219,15 +220,15 @@ var iframeID,
     // Path to the tools_variables file
     klToolsVariablesFile = klToolsPath + 'js/tools_variables.js',
     // Path to additional_customization file
-    klToolsAdditionalCustomizationFile =  klToolsPath + 'js/additional_customization.js',
+    klToolsAdditionalCustomizationFile = klToolsPath + 'js/additional_customization.js',
     // To utilize the features that pull from the Canvas api you will need the hosted php files put their path here
     klApiToolsPath = klToolsPath + 'api/',
     // Path to institutional css file
-    globalCSSFile = 'https://canvastools.unthsc.edu/global/css/custom_branding.css',
+    klGlobalCSSFile = 'https://canvastools.unthsc.edu/global/css/canvasGlobal.css',
     klFontAwesomePath = '//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css',
     coursenum;
 
-function getCourseNum() {
+function klGetCourseNum() {
     'use strict';
     var matches, killspot;
     // Parse Course Number - It is stored in the variable "coursenum"
@@ -241,23 +242,21 @@ function getCourseNum() {
         }
     }
 }
-getCourseNum();
+klGetCourseNum();
 
 
 // Pull in custom variables
-$.getScript(klToolsPath + "js/tools_variables.js", function () {
+$.getScript(klToolsVariablesFile, function () {
     'use strict';
     console.log("tools_variables.js loaded");
-});
-// Additional Customization
-$.getScript(klToolsAdditionalCustomizationFile, function () {
-    'use strict';
-    console.log("additional_customization.js loaded");
-});
-// Run code to initialize tools
-$.getScript(klToolsPath + "js/master_controls.js", function () {
-    'use strict';
-    console.log("master_controls.js loaded");
+    // Additional Customization
+    $.getScript(klToolsAdditionalCustomizationFile, function () {
+        console.log("additional_customization.js loaded");
+        // Run code to initialize tools
+        $.getScript(klToolsPath + "js/master_controls.js", function () {
+            console.log("master_controls.js loaded");
+        });
+    });
 });
 
 ////////////////////////////////////////////////////

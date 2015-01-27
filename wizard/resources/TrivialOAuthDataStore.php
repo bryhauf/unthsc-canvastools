@@ -35,11 +35,11 @@ class TrivialOAuthDataStore extends OAuthDataStore {
         return NULL;
     }
 
-    function new_request_token($consumer) {
+    function new_request_token($consumer, $callback = null) {
         return NULL;
     }
 
-    function new_access_token($token, $consumer) {
+    function new_access_token($token, $consumer, $verifier = null) {
         return NULL;
     }
 }

@@ -1,6 +1,6 @@
 /*jslint browser: true, sloppy: false, eqeq: false, vars: false, maxerr: 50, indent: 4, plusplus: true */
-/*global $, jQuery, iframeID, alert, coursenum, console, klToolsPath, globalCSSPath, klFontAwesomePath, tinymce, tinyMCE, klToolsVariables,
-klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
+/*global $, jQuery, iframeID, alert, coursenum, console, klToolsPath, klGlobalCSSPath, klFontAwesomePath, tinymce, tinyMCE, klToolsVariables,
+klToolsArrays, vendor_legacy_normal_contrast, klAfterToolLaunch, klAdditionalAccordionSections */
 
 // These tools were designed to facilitate rapid course development in the Canvas LMS
 // Copyright (C) 2014  Kenneth Larsen - Center for Innovative Design and Instruction
@@ -74,7 +74,7 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
 /////////////////////////////////////////////////////////////
 
     // Draft state adds an h2 with the page title, give user choice to include this otherwise we will get rid of it
-    function showPageTitle() {
+    function klShowPageTitle() {
         if ($('input#title').length > 0 && $('.kl_show_title').length === 0) {
             $('input#title').after(' <a href="#" class="btn kl_show_title" data-tooltip="top" title="Show this title as a heading above the page content">Show title</a>');
             $('.kl_show_title').unbind("click").click(function (e) {
@@ -95,13 +95,13 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
         }
     }
     // Styles and code to be applied to TinyMCE editor
-    function addStyletoIframe() {
+    function klAddStyletoIframe() {
         if (!$(iframeID).contents().find('body').hasClass('kl_has_style')) {
             var $head = $(iframeID).contents().find('head'),
                 timestamp =  +(new Date());
             $head.append($('<link/>', { rel: 'stylesheet', href: klToolsVariables.vendor_legacy_normal_contrast, type: 'text/css' }));
             $head.append($('<link/>', { rel: 'stylesheet', href: klToolsVariables.common_legacy_normal_contrast, type: 'text/css' }));
-            $head.append($('<link/>', { rel: 'stylesheet', href: globalCSSFile + '?' + timestamp, type: 'text/css' }));
+            $head.append($('<link/>', { rel: 'stylesheet', href: klGlobalCSSFile + '?' + timestamp, type: 'text/css' }));
             $head.append($('<link/>', { rel: 'stylesheet', href: klToolsPath + 'css/canvasMCEEditor.css?' + timestamp, type: 'text/css' }));
             $head.append($("<link/>", { rel: "stylesheet", href: klFontAwesomePath, type: 'text/css'}));
             if ($(iframeID).contents().find('#kl_custom_css').length > 0) {
@@ -113,7 +113,7 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
             // }
         }
     }
-    function bannerImageCheck() {
+    function klBannerImageCheck() {
         // Check to see if a banner image exists it will throw an error either way.
         if ($(iframeID).contents().find('.kl_fp_panel_nav').length > 0 || $(iframeID).contents().find('.kl_fp_horizontal_nav').length > 0) {
             $.ajax({
@@ -130,7 +130,7 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
         }
     }
     // check given element and parents to find target attribute color
-    function kl_getColor(jqueryElement, targetAttribute) {
+    function klGetColor(jqueryElement, targetAttribute) {
         // Is current element's targetAttribute color set?
         var color = jqueryElement.css(targetAttribute);
         if ((color !== 'rgba(0, 0, 0, 0)') && (color !== 'transparent')) {
@@ -144,7 +144,7 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
             return false;
         }
         // call kl_getColor with parent item
-        return kl_getColor(jqueryElement.parent(), targetAttribute);
+        return klGetColor(jqueryElement.parent(), targetAttribute);
     }
     // Convert RGB color value to hexidecimal
     function rgb2hex(rgb) {
@@ -167,18 +167,18 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
     }
 
     // Move the specified editor content to the top
-    function scrollToElement(targetElement) {
+    function klScrollToElement(targetElement) {
         $(iframeID).contents().find(targetElement).get(0).scrollIntoView();
         $('a:contains("HTML Editor")').get(0).scrollIntoView();
     }
     // Adds class to connected section when mouse hovers over sortable lists
-    function bindHover() {
+    function klBindHover() {
         $('.kl_template_sections_list li').mouseover(function () {
             var el = $(this),
                 connectedSection = $(this).find('input').attr('value'),
                 timeoutID = setTimeout(function () {
                     $(iframeID).contents().find('#' + connectedSection).addClass('kl_section_hover');
-                    scrollToElement('#' + connectedSection);
+                    klScrollToElement('#' + connectedSection);
                 }, 500);
             el.mouseout(function () {
                 connectedSection = $(this).find('input').attr('value');
@@ -186,12 +186,12 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
                 clearTimeout(timeoutID);
             });
         });
-        $('#kl_accordion_panels li, #kl_tab_panels li, .kl_sections_li li, #kl_module_list li, .kl_sections_list li').mouseover(function () {
+        $('#kl_accordion_panels li, #kl_tab_panels li, .kl_sections_list li, .kl_qc_sections li').mouseover(function () {
             var el = $(this),
                 connectedSection = $(this).attr('rel'),
                 timeoutID = setTimeout(function () {
                     $(iframeID).contents().find(connectedSection).addClass('kl_section_hover');
-                    scrollToElement(connectedSection);
+                    klScrollToElement(connectedSection);
                 }, 500);
             el.mouseout(function () {
                 connectedSection = $(this).attr('rel');
@@ -201,7 +201,7 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
         });
     }
     // and is the first item on the page. Also replaces old css code
-    function customCSSCheck() {
+    function klCustomCSSCheck() {
         if ($(iframeID).contents().find('#kl_custom_css').length > 0) {
             // if it has contents unwrap them
             if ($(iframeID).contents().find('#kl_custom_css').text().length > 1) {
@@ -225,7 +225,7 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
     }
 
     // Toggle element outlines in MCE editor
-    function setDisplay() {
+    function klSetDisplay() {
         $(iframeID).contents().find('#tinymce').addClass('mceContentBody');
         $(iframeID).contents().find('.kl_mce_visual_blocks').removeClass('kl_mce_visual_blocks');
         $(iframeID).contents().find('.kl_mce_visual_sections').removeClass('kl_mce_visual_sections');
@@ -237,22 +237,22 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
         });
         $('a:contains("HTML Editor")').get(0).scrollIntoView();
     }
-    function displayTypes() {
+    function klDisplayTypes() {
         $('.kl_mce_section_view, .kl_mce_labels_view').unbind("click").click(function (e) {
             e.preventDefault();
             $(this).toggleClass('active');
             $('.kl_mce_preview').removeClass('active');
-            setDisplay();
+            klSetDisplay();
         });
         $('.kl_mce_preview').unbind("click").click(function (e) {
             e.preventDefault();
             $(this).addClass('active');
             $('.kl_mce_section_view, .kl_mce_labels_view').removeClass('active');
-            setDisplay();
+            klSetDisplay();
         });
     }
     // Cleans out all empty elements and elements containing only &nbsp;
-    function removeEmpty() {
+    function klCleanUp() {
         $('.kl_remove_empty').unbind("click").click(function (e) {
             e.preventDefault();
             $(iframeID).contents().find('h2, h3, h4, p, h3, li, ol, ul').each(function () {
@@ -262,19 +262,24 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
                 }
             });
         });
+        $('.kl_unwrap').unbind("click").click(function (e) {
+            e.preventDefault();
+            tinyMCE.DOM.addClass(tinyMCE.activeEditor.selection.getNode(), "kl_unwrap_me");
+            $(iframeID).contents().find('.kl_unwrap_me').contents().unwrap();
+        });
     }
     // Clear out the blank span added when the template wrapper is first created
-    function removeTempContent() {
+    function klRemoveTempContent() {
         $('.kl_delete_me').remove();
     }
-    function highlightNewElement(targetElement) {
+    function klHighlightNewElement(targetElement) {
         $(iframeID).contents().find(targetElement).addClass('kl_section_hover');
         setTimeout(function () {
             $(iframeID).contents().find(targetElement).removeClass('kl_section_hover');
         }, 1000);
     }
      // Show/Hide remove unchecked sections button
-    function checkRemove() {
+    function klCheckRemove() {
         if ($(iframeID).contents().find('.kl_to_remove').length > 0) {
             $('.kl_remove_sections_wrapper').show();
         } else {
@@ -282,13 +287,13 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
         }
     }
     // When an element is unchecked, it will highlight it and jump to it in content area
-    function markToRemove(targetSection) {
+    function klMarkToRemove(targetSection) {
         $(iframeID).contents().find(targetSection).addClass('kl_to_remove');
-        scrollToElement(targetSection);
-        checkRemove();
+        klScrollToElement(targetSection);
+        klCheckRemove();
     }
    // If template is not there add it, will also remove and change old template
-    function templateCheck() {
+    function klTemplateCheck() {
         // Remove or change old template elements
         if ($(iframeID).contents().find('#kl_wrapper').length > 0) {
             var currentTheme = $(iframeID).contents().find('#kl_wrapper').attr('class');
@@ -299,9 +304,9 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
         }
     }
     // Initiate Color Pickers
-    function initializeColorPicker(inputName, targetElement, attribute) {
+    function klInitializeColorPicker(inputName, targetElement, attribute) {
         var chosenColor = '',
-            startingColor = kl_getColor($(iframeID).contents().find(targetElement), attribute),
+            startingColor = klGetColor($(iframeID).contents().find(targetElement), attribute),
             bgHex,
             textColor;
         $(inputName).spectrum({
@@ -331,7 +336,7 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
         });
     }
 
-    function addSectionControls(title, connectedSectionID) {
+    function klAddSectionControls(title, connectedSectionID) {
         var newSectionControls = '<li rel="#' + connectedSectionID + '" class="' + connectedSectionID + '_section"><span title="Drag to reorder" class="move_item_link"><img alt="Move" src="/images/move.png?1366214258"></span>&nbsp;' +
             '<span class="kl_section_title">' + title + '</span>' +
             '<a class="kl_delete_section kl_remove icon-end pull-right" rel="' + connectedSectionID + '" href="#" data-tooltip="left" title="Delete this Section.">' +
@@ -362,31 +367,31 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
 
         // Styles that utilize the bottom banner div
     // Check and mark current theme in toolbar
-    function currentPagesThemeCheck() {
-        addStyletoIframe();
+    function klCurrentPagesThemeCheck() {
+        klAddStyletoIframe();
         setTimeout(function () {
             if ($(iframeID).contents().find('#kl_wrapper').length > 0) {
                 var currentTheme = $(iframeID).contents().find('#kl_wrapper').attr('class');
                 $('#' + currentTheme).addClass('kl_active_theme');
                 $('.kl_theme_color_pickers').show();
-                initializeColorPicker('#kl_banner_background', '#kl_banner', 'background-color');
-                initializeColorPicker('#kl_banner_text', '#kl_banner', 'color');
-                initializeColorPicker('#kl_banner_heading_background', '#kl_banner h2', 'background-color');
-                initializeColorPicker('#kl_banner_heading_text', '#kl_banner h2', 'color');
-                initializeColorPicker('#kl_banner_left_background', '#kl_banner_left', 'background-color');
-                initializeColorPicker('#kl_banner_left_text', '#kl_banner_left', 'color');
-                initializeColorPicker('#kl_banner_type_background', '.kl_mod_text', 'background-color');
-                initializeColorPicker('#kl_banner_type_text', '.kl_mod_text', 'color');
-                initializeColorPicker('#kl_banner_title_background', '#kl_banner_right', 'background-color');
-                initializeColorPicker('#kl_banner_title_text', '#kl_banner_right', 'color');
-                initializeColorPicker('#kl_banner_num_background', '.kl_mod_num', 'background-color');
-                initializeColorPicker('#kl_banner_num_text', '.kl_mod_num', 'color');
+                klInitializeColorPicker('#kl_banner_background', '#kl_banner', 'background-color');
+                klInitializeColorPicker('#kl_banner_text', '#kl_banner', 'color');
+                klInitializeColorPicker('#kl_banner_heading_background', '#kl_banner h2', 'background-color');
+                klInitializeColorPicker('#kl_banner_heading_text', '#kl_banner h2', 'color');
+                klInitializeColorPicker('#kl_banner_left_background', '#kl_banner_left', 'background-color');
+                klInitializeColorPicker('#kl_banner_left_text', '#kl_banner_left', 'color');
+                klInitializeColorPicker('#kl_banner_type_background', '.kl_mod_text', 'background-color');
+                klInitializeColorPicker('#kl_banner_type_text', '.kl_mod_text', 'color');
+                klInitializeColorPicker('#kl_banner_title_background', '#kl_banner_right', 'background-color');
+                klInitializeColorPicker('#kl_banner_title_text', '#kl_banner_right', 'color');
+                klInitializeColorPicker('#kl_banner_num_background', '.kl_mod_num', 'background-color');
+                klInitializeColorPicker('#kl_banner_num_text', '.kl_mod_num', 'color');
             }
-            bannerImageCheck();
+            klBannerImageCheck();
         }, 1000);
     }
     // Loop through theme array and output thumbs
-    function outputThemes(themeArray) {
+    function klOutputThemes(themeArray) {
         $.each(themeArray, function () {
             $('.kl_wiki_themes').append('<li id="' + this + '" class="kl_template_theme kl_wiki_theme" rel="' + this +
                 '" data-tooltip="top" title="' + this +
@@ -395,7 +400,7 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
         });
     }
     // Output themes
-    function outputFrontPageThemes(themeArray) {
+    function klOutputFrontPageThemes(themeArray) {
         $.each(themeArray, function () {
             $('.kl_fp_themes').append('<li><a href="#" id="' + this + '" class="kl_template_theme kl_fp_theme" rel="' + this +
                 '" data-tooltip="top" title="' + this +
@@ -405,7 +410,7 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
     }
 
     // Ensure that necessary sections exist for a given style, will also fix broken banner
-    function themeElements(templateClass) {
+    function klThemeElements(templateClass) {
         var modNum, modText, modTitle, templateBanner;
         // this first portion is designed to fix anything that might have broken
         // Look to see if kl_mod_num exists and grab value
@@ -464,14 +469,14 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
     }
 
     ////// On Ready/Click functions  //////
-    function themesReady() {
+    function klThemesReady() {
         var templateClass;
         // Output theme thumbs
         $('.kl_template_theme').unbind("click").click(function (e) {
             var previousTheme = '', wrapperClasses;
             e.preventDefault();
-            templateCheck();
-            scrollToElement('#kl_wrapper');
+            klTemplateCheck();
+            klScrollToElement('#kl_wrapper');
             // add the class for the selected template to the template-wrapper
             if ($(iframeID).contents().find('#kl_wrapper').hasClass('kl_show_title')) {
                 wrapperClasses = $(iframeID).contents().find('#kl_wrapper').attr('class').replace('kl_show_title', '');
@@ -482,7 +487,7 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
             templateClass = $(this).attr('rel');
             if ($(iframeID).contents().find('#kl_banner').length === 0 || $.inArray(previousTheme, klToolsVariables.klBottomBannerPagesThemeArray) !== -1 || $.inArray(templateClass, klToolsVariables.klBottomBannerPagesThemeArray) !== -1) {
                 templateClass = $(this).attr('rel');
-                themeElements(templateClass);
+                klThemeElements(templateClass);
             }
             $(iframeID).contents().find('#kl_wrapper').removeClass(previousTheme).addClass(templateClass);
             if ($(iframeID).contents().find('#kl_wrapper').hasClass(templateClass)) {
@@ -495,19 +500,19 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
                 $('.kl_banner_section').prop('checked', true).trigger('change');
             }
             $('.kl_theme_color_pickers').show();
-            initializeColorPicker('#kl_banner_background', '#kl_banner', 'background-color');
-            initializeColorPicker('#kl_banner_text', '#kl_banner', 'color');
-            initializeColorPicker('#kl_banner_heading_background', '#kl_banner h2', 'background-color');
-            initializeColorPicker('#kl_banner_heading_text', '#kl_banner h2', 'color');
-            initializeColorPicker('#kl_banner_left_background', '#kl_banner_left', 'background-color');
-            initializeColorPicker('#kl_banner_left_text', '#kl_banner_left', 'color');
-            initializeColorPicker('#kl_banner_type_background', '.kl_mod_text', 'background-color');
-            initializeColorPicker('#kl_banner_type_text', '.kl_mod_text', 'color');
-            initializeColorPicker('#kl_banner_title_background', '#kl_banner_right', 'background-color');
-            initializeColorPicker('#kl_banner_title_text', '#kl_banner_right', 'color');
-            initializeColorPicker('#kl_banner_num_background', '.kl_mod_num', 'background-color');
-            initializeColorPicker('#kl_banner_num_text', '.kl_mod_num', 'color');
-            removeTempContent();
+            klInitializeColorPicker('#kl_banner_background', '#kl_banner', 'background-color');
+            klInitializeColorPicker('#kl_banner_text', '#kl_banner', 'color');
+            klInitializeColorPicker('#kl_banner_heading_background', '#kl_banner h2', 'background-color');
+            klInitializeColorPicker('#kl_banner_heading_text', '#kl_banner h2', 'color');
+            klInitializeColorPicker('#kl_banner_left_background', '#kl_banner_left', 'background-color');
+            klInitializeColorPicker('#kl_banner_left_text', '#kl_banner_left', 'color');
+            klInitializeColorPicker('#kl_banner_type_background', '.kl_mod_text', 'background-color');
+            klInitializeColorPicker('#kl_banner_type_text', '.kl_mod_text', 'color');
+            klInitializeColorPicker('#kl_banner_title_background', '#kl_banner_right', 'background-color');
+            klInitializeColorPicker('#kl_banner_title_text', '#kl_banner_right', 'color');
+            klInitializeColorPicker('#kl_banner_num_background', '.kl_mod_num', 'background-color');
+            klInitializeColorPicker('#kl_banner_num_text', '.kl_mod_num', 'color');
+            klRemoveTempContent();
         });
         $('.kl_remove_banner_left').unbind("click").click(function (e) {
             e.preventDefault();
@@ -517,7 +522,7 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
         $('.kl_repair_theme').unbind("click").click(function (e) {
             e.preventDefault();
             templateClass = $('.kl_active_theme').attr('rel');
-            themeElements(templateClass);
+            klThemeElements(templateClass);
         });
         $('.kl_theme_color_toggle a').unbind("click").click(function (e) {
             e.preventDefault();
@@ -533,15 +538,15 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
         });
         $('.kl_fp_theme').click(function (e) {
             e.preventDefault();
-            templateCheck();
-            scrollToElement('#kl_wrapper');
+            klTemplateCheck();
+            klScrollToElement('#kl_wrapper');
             // add the class for the selected template to the kl_wrapper
             templateClass = $(this).attr('rel');
             $(iframeID).contents().find('#kl_wrapper').removeClass().addClass(templateClass);
             if ($('input.kl_banner_image_section').not(':checked')) {
                 $('.kl_banner_image_section').prop('checked', true).trigger('change');
                 $(iframeID).contents().find('#kl_banner_image').insertAfter($(iframeID).contents().find('#kl_banner'));
-                bannerImageCheck();
+                klBannerImageCheck();
             }
             if ($('input.kl_navigation_section').not(':checked')) {
                 $('.kl_navigation_section').prop('checked', true).trigger('change');
@@ -554,7 +559,7 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
                 connectedElement = $(this).attr('rel'),
                 timeoutID = setTimeout(function () {
                     $(iframeID).contents().find(connectedElement).addClass('kl_section_hover');
-                    scrollToElement('#kl_banner');
+                    klScrollToElement('#kl_banner');
                 }, 500);
             el.mouseout(function () {
                 connectedElement = $(this).attr('rel');
@@ -568,12 +573,12 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
             $('.kl_wizard_notice').html('For help creating banner images, add the Template Wizard App from <a href="/courses/' + coursenum + '/settings" target="_blank">Settings</a> > Navigation.');
         }
 
-        customCSSCheck();
-        currentPagesThemeCheck();
+        klCustomCSSCheck();
+        klCurrentPagesThemeCheck();
     }
 
     ////////// Custom Tools Accordion tab setup  //////  //////
-    function themeTool() {
+    function klThemeTool() {
         var themesAccordionSection = '<h3 class="kl_wiki">' +
             '    Themes' +
             '    <a class="help pull-right kl_tools_help" data-tooltip=\'{"tooltipClass":"popover right", "position":"right"}\'' +
@@ -625,10 +630,10 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
             '    </div>' +
             '</div>';
         $('#kl_tools_accordion').append(themesAccordionSection);
-        outputFrontPageThemes(klToolsVariables.klFrontPageThemeArray);
-        outputThemes(klToolsVariables.klPagesThemeArray);
-        outputThemes(klToolsVariables.klBottomBannerPagesThemeArray);
-        themesReady();
+        klOutputFrontPageThemes(klToolsVariables.klFrontPageThemeArray);
+        klOutputThemes(klToolsVariables.klPagesThemeArray);
+        klOutputThemes(klToolsVariables.klBottomBannerPagesThemeArray);
+        klThemesReady();
     }
 
 /////////////////////////////////////////////////////////////
@@ -637,26 +642,26 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
 
     //// SUPPORTING FUNCTIONS ////
     // If the checked section exists, move it, if not add it
-    function checkTemplateSection(sectionName, sectionArray) {
+    function klCheckTemplateSection(sectionName, sectionArray) {
         var sectionTitle,
             container = $(iframeID).contents().find('#kl_wrapper');
         sectionName = sectionName.replace('#', '');
         if ($(iframeID).contents().find('#' + sectionName).length > 0) {
             $(iframeID).contents().find('#' + sectionName).appendTo(container).removeClass('kl_to_remove');
-            checkRemove();
+            klCheckRemove();
         } else {
             $(iframeID).contents().find('#kl_wrapper').append(sectionArray[sectionName]);
         }
         if ($('.kl_sections_list .' + sectionName + '_section').length === 0) {
             sectionTitle = sectionName.replace('kl_', '').replace('_', ' ');
-            addSectionControls(sectionTitle, sectionName);
-            bindHover();
+            klAddSectionControls(sectionTitle, sectionName);
+            klBindHover();
         }
     }
 
     // Create a new section using the input in the template dialog
-    function createSection() {
-        templateCheck();
+    function klCreateSection() {
+        klTemplateCheck();
         var newSectionName, newSectionID, newSection;
         // Grab name from text field
         newSectionName = $('#kl_new_section_name').val();
@@ -673,16 +678,16 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
             // Clear the section name field
             $('#kl_new_section_name').val('');
             // Create an <li> for this section in the Sections List
-            addSectionControls(newSectionName, newSectionID);
+            klAddSectionControls(newSectionName, newSectionID);
             // Put focus on new section
-            scrollToElement('#' + newSectionID);
-            highlightNewElement('#' + newSectionID);
-            bindHover();
+            klScrollToElement('#' + newSectionID);
+            klHighlightNewElement('#' + newSectionID);
+            klBindHover();
         }
     }
 
     // This function loops through existing content and then updates section controls
-    function identifySections() {
+    function klIdentifySections() {
         var sectionTitle, newID;
         // for any div that does not have an id, add the text from the heading as the id
         $(iframeID).contents().find('#kl_wrapper').children('div:not([id])').each(function () {
@@ -724,49 +729,73 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
             if (myTitle.length > 25) {
                 myTitle = myTitle.substring(0, 25);
             }
-            addSectionControls(myTitle, myValue);
+            klAddSectionControls(myTitle, myValue);
             $('.kl_element_color_pickers').show();
-            initializeColorPicker('#kl_h3_background', '#kl_wrapper h3', 'background-color');
-            initializeColorPicker('#kl_h3_text', '#kl_wrapper h3', 'color');
-            initializeColorPicker('#kl_h4_background', '#kl_wrapper h4', 'background-color');
-            initializeColorPicker('#kl_h4_text', '#kl_wrapper h4', 'color');
+            klInitializeColorPicker('#kl_h3_background', '#kl_wrapper h3', 'background-color');
+            klInitializeColorPicker('#kl_h3_text', '#kl_wrapper h3', 'color');
+            klInitializeColorPicker('#kl_h4_background', '#kl_wrapper h4', 'background-color');
+            klInitializeColorPicker('#kl_h4_text', '#kl_wrapper h4', 'color');
         });
-        bindHover();
+        klBindHover();
     }
     // Parent element of cursor position will become the title of the theme
-    function markTitle() {
-        $('#kl_sections_buttons').prepend(' <a class="btn btn-mini kl_mark_title kl_margin_bottom" href="#" data-tooltip="top"' +
+    function klEditTitle() {
+        var klTitleButtons = ' <a class="btn btn-mini kl_add_subtitle kl_margin_bottom" href="#" data-tooltip="top"' +
+            '   title="Add a subtitle to the page banner"><i class="icon-text"></i> Add Subtitle</a>' +
+            ' <a class="btn btn-mini kl_remove_subtitle kl_margin_bottom" href="#" data-tooltip="top"' +
+            '   title="Remove the page banner subtitle"><i class="icon-text"></i> Remove Subtitle</a>' +
+            ' <a class="btn btn-mini kl_mark_title kl_margin_bottom" href="#" data-tooltip="top"' +
             '    title="Place the cursor on the element you want to become the module title and click this button.">' +
             '    <i class="icon-text"></i> Make Title' +
-            '</a>').append($('.kl_remove_empty').clone());
+            '</a>';
+        $('#kl_sections_buttons').prepend(klTitleButtons).append($('.kl_remove_empty').clone());
         $('.kl_mark_title').unbind("click").click(function (e) {
             var existingTitle = tinyMCE.DOM.getParent(tinyMCE.activeEditor.selection.getNode()).innerHTML;
             e.preventDefault();
-            templateCheck();
+            klTemplateCheck();
             $(iframeID).contents().find('#kl_banner_right').html(existingTitle);
             // if it is an <h2> it will remove original
             tinyMCE.activeEditor.dom.remove(tinyMCE.activeEditor.dom.getParent(tinyMCE.activeEditor.selection.getNode(), 'h2'));
         });
+        $('.kl_add_subtitle').unbind("click").click(function (e) {
+            e.preventDefault();
+            $(iframeID).contents().find('#kl_banner_right').append('<span class="kl_subtitle">Page Subtitle</span>');
+            $('.kl_add_subtitle').hide();
+            $('.kl_remove_subtitle').show();
+        });
+        $('.kl_remove_subtitle').unbind("click").click(function (e) {
+            e.preventDefault();
+            $(iframeID).contents().find('.kl_subtitle').remove();
+            $('.kl_add_subtitle').show();
+            $('.kl_remove_subtitle').hide();
+        });
+        if ($(iframeID).contents().find('.kl_subtitle').length > 0) {
+            $('.kl_add_subtitle').hide();
+            $('.kl_remove_subtitle').show();
+        } else {
+            $('.kl_add_subtitle').show();
+            $('.kl_remove_subtitle').hide();
+        }
     }
     // Make kl_sections_list sortable so sections can be reordered
-    function sortableSections(sectionArray) {
+    function klSortableSections(sectionArray) {
         var connectedSection;
         $('.kl_sections_list').sortable({
             update: function () {
                 // Add the basic template style if one is not already set
-                templateCheck();
+                klTemplateCheck();
                 // loop through the checked sections and move or add them
                 $('.kl_sections_list li').each(function () {
                     connectedSection = $(this).attr('rel');
-                    checkTemplateSection(connectedSection, sectionArray);
+                    klCheckTemplateSection(connectedSection, sectionArray);
                 });
-                bindHover();
+                klBindHover();
             }
         });
         $('.kl_sections_list').disableSelection();
     }
     // Wrap existing code into a new section and add to content portion "Selection to Section" button
-    function wrapSection() {
+    function klWrapSection() {
         var tempSection, sectionTitle, newID, container;
         tinyMCE.activeEditor.focus();
         tinyMCE.activeEditor.selection.setContent('<div id="kl_temp_section">' + tinyMCE.activeEditor.selection.getContent() + '</div>');
@@ -783,22 +812,22 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
         $(container).append(tempSection);
         $(tempSection).attr('id', newID);
         // Create an <li> for this section in the Sections List
-        addSectionControls(sectionTitle, newID);
+        klAddSectionControls(sectionTitle, newID);
     }
     // Selection to section button
-    function selectionToSection() {
-        $('#kl_sections_buttons').prepend(' <a class="selectionToSection btn btn-mini kl_margin_bottom" data-tooltip="top"' +
+    function klSelectionToSection() {
+        $('#kl_sections_buttons').prepend(' <a class="klSelectionToSection btn btn-mini kl_margin_bottom" data-tooltip="top"' +
             ' title="Turn selected content into a new section.<br><span class=\'text-warning\'>' +
             '<strong>Content must contain a heading element!</strong></span>">' +
             '   <i class="icon-collection-save"></i> Selection to Section</a>');
-        $('.selectionToSection').click(function () {
-            templateCheck();
-            wrapSection();
+        $('.klSelectionToSection').click(function () {
+            klTemplateCheck();
+            klWrapSection();
         });
     }
     // Wrap existing section as one of the default sections (i.e. Objectives, Readings, Lectures, etc)
-    function wrapNamedSection(sectionName) {
-        templateCheck();
+    function klWrapNamedSection(sectionName) {
+        klTemplateCheck();
         var tempSection,
             container = $(iframeID).contents().find('#kl_wrapper');
         tinyMCE.activeEditor.focus();
@@ -810,33 +839,33 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
     }
 
     // Sections initialization functions
-    function sectionsReady(sectionArray) {
-        identifySections(sectionArray);
-        sortableSections(sectionArray);
-        selectionToSection();
-        markTitle();
+    function klSectionsReady(sectionArray) {
+        klIdentifySections(sectionArray);
+        klSortableSections(sectionArray);
+        klSelectionToSection();
+        klEditTitle();
         // Add headings to the template section list
         $('.kl_introduction_section').parents('li').before('<li class="kl_li_heading">Content Page</li>');
         $('.kl_banner_section').parents('li').before('<li class="kl_li_heading">Front Page</li>');
         // Functions to run when a section checkbox is changed
         $('.kl_template_sections_list input:checkbox').change(function () {
             if ($(this).is(':checked')) {
-                templateCheck();
-                checkTemplateSection(this.value, sectionArray);
+                klTemplateCheck();
+                klCheckTemplateSection(this.value, sectionArray);
                 // $('.kl_template_sections_list input:checkbox:checked').each(function () {
                 // });
                 $('.kl_element_color_pickers').show();
-                initializeColorPicker('#kl_h3_background', '#kl_wrapper h3', 'background-color');
-                initializeColorPicker('#kl_h3_text', '#kl_wrapper h3', 'color');
-                initializeColorPicker('#kl_h4_background', '#kl_wrapper h4', 'background-color');
-                initializeColorPicker('#kl_h4_text', '#kl_wrapper h4', 'color');
+                klInitializeColorPicker('#kl_h3_background', '#kl_wrapper h3', 'background-color');
+                klInitializeColorPicker('#kl_h3_text', '#kl_wrapper h3', 'color');
+                klInitializeColorPicker('#kl_h4_background', '#kl_wrapper h4', 'background-color');
+                klInitializeColorPicker('#kl_h4_text', '#kl_wrapper h4', 'color');
                 $('.kl_identify_section_' + this.value).hide();
             } else {
                 var targetSection = '#' + this.value;
-                markToRemove(targetSection);
+                klMarkToRemove(targetSection);
             }
-            scrollToElement('#' + this.value);
-            bindHover();
+            klScrollToElement('#' + this.value);
+            klBindHover();
         });
         // When they click "Remove Unckecked Section(s)" make the necessary changes
         $('.kl_remove_sections').click(function () {
@@ -847,19 +876,19 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
         // "+" button next to new section field
         $('#kl_add_section').unbind("click").click(function (e) {
             e.preventDefault();
-            createSection(sectionArray);
+            klCreateSection(sectionArray);
         });
         // Button that turns selected text into a predefined section
         $('.kl_identify_section').unbind("click").click(function (e) {
             e.preventDefault();
             var sectionName = $(this).attr('rel');
-            wrapNamedSection(sectionName);
+            klWrapNamedSection(sectionName);
         });
         // create a new section if return/enter is pressed in the new section field
         $('#kl_new_section_name').keydown(function (event) {
             if (event.keyCode === 13) {
                 event.preventDefault();
-                createSection(sectionArray);
+                klCreateSection(sectionArray);
                 return false;
             }
         });
@@ -868,7 +897,7 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
             $('#kl_sections_box').dialog({ position: { my: 'right top', at: 'left top', of: '#kl_tools' }, modal: false, width: 255 });
         });
         $('.kl_banner_image_section').change(function () {
-            bannerImageCheck();
+            klBannerImageCheck();
         });
         // Pull existing Canvas Pages
         // Duplicate Canvas list
@@ -879,7 +908,7 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
     }
 
     // Accordion Panel Content
-    function sectionsTool(sectionArray) {
+    function klSectionsTool(sectionArray) {
         var addAccordionSection, sectionTitle, displayTitle, templateContentBtns;
         if (toolsToLoad === 'syllabus') {
             sectionTitle = 'Syllabus Section Wrappers';
@@ -941,14 +970,14 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
             templateContentBtns = '<a href="#" class="btn btn-mini kl_sections_btn kl_margin_bottom fa fa-magic"> Template Sections</a>';
         }
         $('.kl_template_content_btn').html(templateContentBtns);
-        sectionsReady(sectionArray);
+        klSectionsReady(sectionArray);
     }
 
 /////////////////////////////////////////////////////////////
 //  ACCESSIBILITY TOOLS                                    //
 /////////////////////////////////////////////////////////////
     // Accessibility Checks
-    function accessibilityToolsReady() {
+    function klAccessibilityToolsReady() {
         $('.kl_accessibility_color_check_toggle').unbind("click").click(function (e) {
             e.preventDefault();
             if ($('body').hasClass('kl_accessibility_color_check')) {
@@ -961,10 +990,15 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
                 $(this).addClass('active');
             }
         });
+        if (navigator.userAgent.toLowerCase().indexOf('firefox') > -1) {
+            //Doesn't work in Firefox
+            $('.kl_accessibility_color_check_toggle').addClass('disabled');
+            $('.kl_accessibility_color_check_toggle').after('<p class="alert alert-error">Does not work in Firefox</p>');
+        }
     }
 
     ////// Custom Tools Accordion tab setup  //////
-    function accessibilityTools() {
+    function klAccessibilityTools() {
         var addAccordionSection = '<h3 class="kl_wiki" style="margin-top: 10px;">' +
             '   Accessibility Checking' +
             '       <a class="help pull-right kl_tools_help" data-tooltip=\'{"tooltipClass":"popover right", "position":"right"}\'' +
@@ -979,7 +1013,7 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
             '<a href="#" class="btn btn-mini kl_accessibility_color_check_toggle kl_margin_bottom"><i class="fa fa-adjust"></i> Color Check</a>' +
             '</div>';
         $('#kl_tools_accordion').append(addAccordionSection);
-        accessibilityToolsReady();
+        klAccessibilityToolsReady();
     }
 
 /////////////////////////////////////////////////////////////
@@ -987,7 +1021,7 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
 /////////////////////////////////////////////////////////////
 
     //// SUPPORTING FUNCTIONS ////
-    function deleteAccordion() {
+    function klDeleteAccordion() {
         $('.kl_delete_acc_tool').unbind("click").click(function (e) {
             e.preventDefault();
             $(iframeID).contents().find('.kl_custom_accordion_wrapper').remove();
@@ -996,7 +1030,7 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
             $('.kl_delete_acc_tool').hide();
         });
     }
-    function deleteAccPanel() {
+    function klDeleteAccPanel() {
         // Bind Delete
         $('.kl_delete_acc_panel').click(function () {
             var panelToRemove = $(this).attr('rel');
@@ -1004,7 +1038,7 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
             $(iframeID).contents().find(panelToRemove).remove();
         });
     }
-    function markCurrentAcc() {
+    function klMarkCurrentAcc() {
         $('.kl_acc_mark_current').unbind("click").click(function (e) {
             e.preventDefault();
             $(iframeID).contents().find('.kl_current_acc').removeClass('kl_current_acc');
@@ -1016,11 +1050,11 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
                 $('#kl_accordion_panels .kl_current_acc').removeClass('kl_current_acc');
                 $(this).addClass('kl_current_acc');
             }
-            scrollToElement('.kl_custom_accordion');
+            klScrollToElement('.kl_custom_accordion');
         });
     }
 
-    function getAccPanels() {
+    function klGetAccPanels() {
         if ($(iframeID).contents().find('.kl_custom_accordion').length > 0) {
             if ($(iframeID).contents().find('.kl_custom_accordion').length > 0 && $(iframeID).contents().find('.kl_custom_accordion_wrapper').length === 0) {
                 $(iframeID).contents().find('.kl_custom_accordion').wrap('<div class="kl_custom_accordion_wrapper" />');
@@ -1067,26 +1101,26 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
                     $(iframeID).contents().find('.kl_custom_accordion').append($(iframeID).contents().find('div' + panelClass));
                 });
                 $('#kl_accordion_panels').empty();
-                getAccPanels();
+                klGetAccPanels();
             }
         });
         $('#kl_accordion_panels').disableSelection();
-        deleteAccPanel();
-        deleteAccordion();
-        markCurrentAcc();
+        klDeleteAccPanel();
+        klDeleteAccordion();
+        klMarkCurrentAcc();
     }
-    function accordionCheck() {
+    function klAccordionCheck() {
         if ($(iframeID).contents().find('.kl_custom_accordion').length === 0) {
-            templateCheck();
+            klTemplateCheck();
             $('.kl_delete_acc_tool').show();
-            deleteAccordion();
+            klDeleteAccordion();
             // Insert the new section into the TinyMCE editor at cursor
             tinyMCE.execCommand('mceInsertContent', false, '<div class="kl_custom_accordion"></div><p>&nbsp;</p>');
             $('#kl_new_acc_panel').focus();
         }
     }
-    function addAccPanel() {
-        accordionCheck();
+    function klAddAccPanel() {
+        klAccordionCheck();
         // Grab name from text field
         var newAccPanelName = $('#kl_new_acc_panel').val(),
             panelCount,
@@ -1117,16 +1151,16 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
             // Clear the section name field
             $('#kl_new_acc_panel').val('');
             // Put focus on new section
-            scrollToElement('.' + newPanelClass);
-            highlightNewElement('.' + newPanelClass);
-            deleteAccPanel();
+            klScrollToElement('.' + newPanelClass);
+            klHighlightNewElement('.' + newPanelClass);
+            klDeleteAccPanel();
             $('#kl_accordion_panels').focus().html('');
-            getAccPanels();
-            bindHover();
+            klGetAccPanels();
+            klBindHover();
         }
     }
     // Tabs //
-    function deleteTabSection() {
+    function klDeleteTabSection() {
         $('.kl_delete_tab_tool').unbind("click").click(function (e) {
             e.preventDefault();
             $(iframeID).contents().find('.kl_tabbed_section').remove();
@@ -1135,7 +1169,7 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
             $('.kl_tab_options form').show();
         });
     }
-    function deleteTabPanel() {
+    function klDeleteTabPanel() {
         // Bind Delete
         $('.kl_delete_tab_panel').click(function () {
             var panelToRemove = $(this).attr('rel');
@@ -1143,12 +1177,12 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
             $(iframeID).contents().find(panelToRemove).remove();
         });
     }
-    function tabsCheck() {
+    function klTabsCheck() {
         if ($(iframeID).contents().find('.kl_tabbed_section').length === 0) {
-            templateCheck();
+            klTemplateCheck();
             $('.kl_delete_tab_tool').show();
-            deleteTabPanel();
-            deleteTabSection();
+            klDeleteTabPanel();
+            klDeleteTabSection();
             // Insert the new section into the TinyMCE editor
             if ($('.kl_tab_minimal').hasClass('active')) {
                 tinyMCE.execCommand('mceInsertContent', false, '<div class="kl_tabbed_section ui-tabs-minimal" /><p>&nbsp;</p>');
@@ -1158,7 +1192,7 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
             $('#kl_new_tab_panel').focus();
         }
     }
-    function markCurrentTab() {
+    function klMarkCurrentTab() {
         $('.kl_tab_mark_current').unbind("click").click(function (e) {
             e.preventDefault();
             $(iframeID).contents().find('.kl_current_tab').removeClass('kl_current_tab');
@@ -1171,10 +1205,10 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
                 $(iframeID).contents().find('#' + tabNum).addClass('kl_current_tab');
                 $(this).addClass('kl_current_tab');
             }
-            scrollToElement('.kl_tabbed_section');
+            klScrollToElement('.kl_tabbed_section');
         });
     }
-    function getTabPanels() {
+    function klGetTabPanels() {
         $('#kl_tab_panels').html('');
         if ($(iframeID).contents().find('.kl_tabbed_section').length > 0) {
             $(iframeID).contents().find('.kl_tabbed_section h4').each(function (i) {
@@ -1224,17 +1258,17 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
             }
         });
         $('#kl_tab_panels').disableSelection();
-        deleteTabPanel();
-        deleteTabSection();
-        markCurrentTab();
+        klDeleteTabPanel();
+        klDeleteTabSection();
+        klMarkCurrentTab();
         // Check for old tabs layout and alert about update
         if ($(iframeID).contents().find('.custom-tabs').length > 0) {
             $('.kl_tab_options').append('<div class="alert alert-error">Tabs have been updated to be more versital, these controls will not work with your current tabs</div>');
         }
     }
-    function addTabPanel() {
+    function klAddTabPanel() {
         var newTabPanelName, panelCount, panelNum, newPanelClass, newPanel, panelClass;
-        tabsCheck();
+        klTabsCheck();
         // Grab name from text field
         newTabPanelName = $('#kl_new_tab_panel').val();
         if (newTabPanelName !== '') {
@@ -1267,13 +1301,13 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
                 '    <span class="screenreader-only">Delete Tab Panel</span>' +
                 '</a></li>');
         // Put focus on new section
-            scrollToElement('.' + newPanelClass);
-            highlightNewElement('.' + newPanelClass);
-            bindHover();
+            klScrollToElement('.' + newPanelClass);
+            klHighlightNewElement('.' + newPanelClass);
+            klBindHover();
         // Clear the section name field
             $('#kl_new_tab_panel').val('');
 
-            deleteTabPanel();
+            klDeleteTabPanel();
         }
         $('#kl_tab_panels').sortable({
             update: function () {
@@ -1286,11 +1320,11 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
             }
         });
         $('#kl_tab_panels').disableSelection();
-        getTabPanels();
+        klGetTabPanels();
     }
 
     ////// READY FUNCTION //////
-    function accordionTabsToolReady() {
+    function klAccordionTabsToolReady() {
     //// TYPE SELECTOR ////
         $('.kl_accordion_or_tabs a').unbind("click").click(function (e) {
             e.preventDefault();
@@ -1303,14 +1337,14 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
             $('.kl_tabs_options').hide();
             $('.' + activeSection + '_options').show();
             if ($('.' + activeSection).length > 0) {
-                scrollToElement('.' + activeSection);
+                klScrollToElement('.' + activeSection);
             }
         });
     //// ACCORDION ////
         // Add a new panel to bottom of list
         $('#kl_add_acc_panel').unbind("click").click(function (e) {
             e.preventDefault();
-            addAccPanel();
+            klAddAccPanel();
         });
         // Remove accordion section
         $('.kl_delete_acc_panel').unbind("click").click(function (e) {
@@ -1324,7 +1358,7 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
         $('#kl_new_acc_panel').keydown(function (event) {
             if (event.keyCode === 13) {
                 event.preventDefault();
-                addAccPanel();
+                klAddAccPanel();
                 return false;
             }
         });
@@ -1332,7 +1366,7 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
         // Add a new panel to bottom of list
         $('#kl_add_tab_panel').unbind("click").click(function (e) {
             e.preventDefault();
-            addTabPanel();
+            klAddTabPanel();
         });
         // Remove tab section
         $('.kl_delete_tab_panel').unbind("click").click(function (e) {
@@ -1345,7 +1379,7 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
         $('#kl_new_tab_panel').keydown(function (event) {
             if (event.keyCode === 13) {
                 event.preventDefault();
-                addTabPanel();
+                klAddTabPanel();
                 return false;
             }
         });
@@ -1363,14 +1397,14 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
             $('.kl_tab_minimal').removeClass('active');
         });
 
-        getAccPanels();
-        getTabPanels();
-        bindHover();
+        klGetAccPanels();
+        klGetTabPanels();
+        klBindHover();
     }
 
 
     ////// Custom Tools Accordion tab setup  //////
-    function accordionTabsTool() {
+    function klAccordionTabsTool() {
         var addAccordionSection = '<h3 class="kl_wiki">' +
             '   Accordion | Tabs' +
             '       <a class="help pull-right kl_tools_help" data-tooltip=\'{"tooltipClass":"popover right", "position":"right"}\'' +
@@ -1432,14 +1466,14 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
             '    </div>' +
             '</div>';
         $('#kl_tools_accordion').append(addAccordionSection);
-        accordionTabsToolReady();
+        klAccordionTabsToolReady();
     }
 
 /////////////////////////////////////////////////////////////
 //  ADVANCED LISTS                                         //
 ///////////////////////////////////////////////////////////// 
 
-    function changeListStyle(selectedStyle) {
+    function klChangeListStyle(selectedStyle) {
         var parentList, currentStyle, regExpMatch, cleanedStyle, newStyle;
         // Get parent element
         parentList = tinyMCE.DOM.getParent(tinyMCE.activeEditor.selection.getNode(), 'ol, ul');
@@ -1460,7 +1494,7 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
     }
 
     ////// On Ready/Click functions  //////
-    function advancedListsReady() {
+    function klAdvancedListsReady() {
         //// TYPE SELECTOR ////
         $('.kl_list_type a').unbind("click").click(function (e) {
             var activeSection = $(this).attr('rel');
@@ -1469,7 +1503,7 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
                 $(this).removeClass('active');
             });
             $(this).addClass('active');
-            // scrollToElement('.custom-"+activeSection);
+            // klScrollToElement('.custom-"+activeSection);
             $('.kl_ol_ul_section').hide();
             $('.kl_definition_list_section').hide();
             $(activeSection).show();
@@ -1516,7 +1550,7 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
         $('.kl_list_style_type').unbind("click").click(function (e) {
             e.preventDefault();
             var selectedStyle = $(this).attr('rel');
-            changeListStyle(selectedStyle);
+            klChangeListStyle(selectedStyle);
         });
         $('.kl_indent_list').unbind("click").click(function (e) {
             e.preventDefault();
@@ -1529,7 +1563,7 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
     }
 
     ////// Custom Tools Accordion tab setup  //////
-    function advancedListsTool() {
+    function klAdvancedListsTool() {
         var addAccordionSection = '<h3 class="kl_wiki">' +
             '    Advanced Lists' +
             '    <a class="help pull-right kl_tools_help" data-tooltip=\'{"tooltipClass":"popover right", "position":"right"}\'' +
@@ -1613,7 +1647,7 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
             '</div>';
         $('#kl_tools_accordion').append(addAccordionSection);
         // accordionOptions();
-        advancedListsReady();
+        klAdvancedListsReady();
     }
 
 /////////////////////////////////////////////////////////////
@@ -1621,7 +1655,7 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
 ///////////////////////////////////////////////////////////// 
 
     ////// Supporting functions  //////
-    function removeBorders(parentElement) {
+    function klRemoveBorders(parentElement) {
         tinyMCE.DOM.removeClass(parentElement, 'border');
         tinyMCE.DOM.removeClass(parentElement, 'border-trbl');
         tinyMCE.DOM.removeClass(parentElement, 'border-rbl');
@@ -1630,19 +1664,19 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
         tinyMCE.DOM.removeClass(parentElement, 'border-b');
         tinyMCE.DOM.removeClass(parentElement, 'border-t');
     }
-    function removeBorderRadius(parentElement) {
+    function klRemoveBorderRadius(parentElement) {
         tinyMCE.DOM.removeClass(parentElement, 'border-round');
         tinyMCE.DOM.removeClass(parentElement, 'border-round-b');
         tinyMCE.DOM.removeClass(parentElement, 'border-round-t');
         tinyMCE.DOM.removeClass(parentElement, 'border-round-tl');
     }
-    function removePadding(parentElement) {
+    function klRemovePadding(parentElement) {
         tinyMCE.DOM.removeClass(parentElement, 'pad-box-mega');
         tinyMCE.DOM.removeClass(parentElement, 'pad-box');
         tinyMCE.DOM.removeClass(parentElement, 'pad-box-mini');
         tinyMCE.DOM.removeClass(parentElement, 'pad-box-micro');
     }
-    function changeSpacing(type, direction) {
+    function klChangeSpacing(type, direction) {
         var kl_spacing_val = $('#kl_' + type + '_input_' + direction).val();
         if ($('#kl_' + type + '_input_' + direction).val() !== '') {
             kl_spacing_val = kl_spacing_val + 'px';
@@ -1651,20 +1685,20 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
         }
         tinyMCE.DOM.setStyle(tinyMCE.activeEditor.selection.getNode(), type + '-' + direction, kl_spacing_val);
     }
-    function changeAllSpacing(type) {
-        changeSpacing(type, 'top');
-        changeSpacing(type, 'right');
-        changeSpacing(type, 'bottom');
-        changeSpacing(type, 'left');
+    function klChangeAllSpacing(type) {
+        klChangeSpacing(type, 'top');
+        klChangeSpacing(type, 'right');
+        klChangeSpacing(type, 'bottom');
+        klChangeSpacing(type, 'left');
     }
-    function clearSpacingInput(type) {
+    function klClearSpacingInput(type) {
         $('#kl_' + type + '_input_all').attr('placeholder', '#').val('');
         $('#kl_' + type + '_input_top').attr('placeholder', '#').val('');
         $('#kl_' + type + '_input_bottom').attr('placeholder', '#').val('');
         $('#kl_' + type + '_input_left').attr('placeholder', '#').val('');
         $('#kl_' + type + '_input_right').attr('placeholder', '#').val('');
     }
-    function currentSpacing(type) {
+    function klCurrentSpacing(type) {
         var kl_spacing_top = tinyMCE.DOM.getStyle(tinyMCE.activeEditor.selection.getNode(), type + '-top', true),
             kl_spacing_bottom = tinyMCE.DOM.getStyle(tinyMCE.activeEditor.selection.getNode(), type + '-bottom', true),
             kl_spacing_left = tinyMCE.DOM.getStyle(tinyMCE.activeEditor.selection.getNode(), type + '-left', true),
@@ -1679,7 +1713,7 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
         $('#kl_' + type + '_input_left').attr('placeholder', kl_spacing_display_left).val('');
         $('#kl_' + type + '_input_right').attr('placeholder', kl_spacing_display_right).val('');
     }
-    function defaultSpacing(type) {
+    function klDefaultSpacing(type) {
         tinyMCE.DOM.setStyle(tinyMCE.activeEditor.selection.getNode(), type, '');
         tinyMCE.DOM.setStyle(tinyMCE.activeEditor.selection.getNode(), type + '-top', '');
         tinyMCE.DOM.setStyle(tinyMCE.activeEditor.selection.getNode(), type + '-bottom', '');
@@ -1688,7 +1722,7 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
     }
 
     ////// On Ready/Click functions  //////
-    function bordersAndSpacingReady() {
+    function klBordersAndSpacingReady() {
         var myClass, elementType, parentElement;
         $('.kl_border_apply a').unbind("click").click(function (e) {
             e.preventDefault();
@@ -1702,7 +1736,7 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
             myClass = $(this).attr('rel');
             elementType = $('.kl_border_apply a.active').attr('rel');
             parentElement = tinyMCE.activeEditor.dom.getParent(tinyMCE.activeEditor.selection.getNode(), elementType);
-            removeBorders(parentElement);
+            klRemoveBorders(parentElement);
             tinyMCE.DOM.addClass(parentElement, myClass);
         });
         $('.kl_custom_border_radius').unbind("click").click(function (e) {
@@ -1710,7 +1744,7 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
             myClass = $(this).attr('rel');
             elementType = $('.kl_border_apply a.active').attr('rel');
             parentElement = tinyMCE.activeEditor.dom.getParent(tinyMCE.activeEditor.selection.getNode(), elementType);
-            removeBorderRadius(parentElement);
+            klRemoveBorderRadius(parentElement);
             tinyMCE.DOM.addClass(parentElement, myClass);
         });
         $('.kl_custom_padding').unbind("click").click(function (e) {
@@ -1718,88 +1752,88 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
             myClass = $(this).attr('rel');
             elementType = $('.kl_border_apply a.active').attr('rel');
             parentElement = tinyMCE.activeEditor.dom.getParent(tinyMCE.activeEditor.selection.getNode(), elementType);
-            removePadding(parentElement);
+            klRemovePadding(parentElement);
             tinyMCE.DOM.addClass(parentElement, myClass);
         });
         $('#kl_margins_apply').click(function (e) {
             e.preventDefault();
-            changeAllSpacing('margin');
+            klChangeAllSpacing('margin');
         });
         // $('#kl_margins_current').click(function (e) {
         //     e.preventDefault();
-        //     currentSpacing('margin');
+        //     klCurrentSpacing('margin');
         // });
         $('#kl_margins_clear').click(function (e) {
             e.preventDefault();
-            clearSpacingInput('margin');
+            klClearSpacingInput('margin');
         });
         $('#kl_margins_default').click(function (e) {
             e.preventDefault();
-            defaultSpacing('margin');
+            klDefaultSpacing('margin');
         });
         $('.kl_margins').each(function () {
             var direction = $(this).attr('rel');
             $('#kl_add_margin_' + direction).unbind("click").click(function (e) {
                 e.preventDefault();
-                changeSpacing('margin', direction);
+                klChangeSpacing('margin', direction);
             });
             $('#kl_margin_input_' + direction).keydown(function (event) {
                 if (event.keyCode === 13) {
                     event.preventDefault();
-                    changeSpacing('margin', direction);
+                    klChangeSpacing('margin', direction);
                     return false;
                 }
             });
         });
         $('#kl_add_margin_all').unbind("click").click(function (e) {
             e.preventDefault();
-            changeAllSpacing('margin');
+            klChangeAllSpacing('margin');
         });
         $('#kl_margin_input_all').keydown(function (event) {
             if (event.keyCode === 13) {
                 event.preventDefault();
-                changeAllSpacing('margin');
+                klChangeAllSpacing('margin');
                 return false;
             }
         });
         $('#kl_padding_apply').click(function (e) {
             e.preventDefault();
-            changeAllSpacing('padding');
+            klChangeAllSpacing('padding');
         });
         // $('#kl_padding_current').click(function (e) {
         //     e.preventDefault();
-        //     currentSpacing('padding');
+        //     klCurrentSpacing('padding');
         // });
         $('#kl_padding_clear').click(function (e) {
             e.preventDefault();
-            clearSpacingInput('padding');
+            klClearSpacingInput('padding');
         });
         $('#kl_padding_default').click(function (e) {
             e.preventDefault();
-            defaultSpacing('padding');
+            klDefaultSpacing('padding');
         });
         $('.kl_padding').each(function () {
             var direction = $(this).attr('rel');
             $('#kl_add_padding_' + direction).unbind("click").click(function (e) {
                 e.preventDefault();
-                changeSpacing('padding', direction);
+                klChangeSpacing('padding', direction);
             });
             $('#kl_padding_input_' + direction).keydown(function (event) {
                 if (event.keyCode === 13) {
                     event.preventDefault();
-                    changeSpacing('padding', direction);
+                    klChangeSpacing('padding', direction);
                     return false;
                 }
             });
         });
         $('#kl_add_padding_all').unbind("click").click(function (e) {
             e.preventDefault();
-            changeAllSpacing('padding');
+            klChangeAllSpacing('padding');
         });
         $('#kl_padding_input_all').keydown(function (event) {
             if (event.keyCode === 13) {
                 event.preventDefault();
-                changeAllSpacing('padding');
+                klChangeAllSpacing('padding');
                 return false;
             }
         });
@@ -1812,13 +1846,13 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
             $('#' + connectedElement).show();
         });
         tinyMCE.activeEditor.onNodeChange.add(function () {
-            currentSpacing('margin');
-            currentSpacing('padding');
+            klCurrentSpacing('margin');
+            klCurrentSpacing('padding');
         });
     }
 
     ////// Custom Tools Accordion tab setup  //////
-    function bordersAndSpacingTool() {
+    function klBordersAndSpacingTool() {
         var toolsAccordionSection = '<h3 class="kl_wiki">' +
             'Borders &amp; Spacing' +
             '    <a class="help pull-right kl_tools_help" data-tooltip=\'{"tooltipClass":"popover right", "position":"right"}\'' +
@@ -1980,7 +2014,7 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
             '   </div>' +
             '</div>';
         $('#kl_tools_accordion').append(toolsAccordionSection);
-        bordersAndSpacingReady();
+        klBordersAndSpacingReady();
     }
 
 /////////////////////////////////////////////////////////////
@@ -1988,7 +2022,7 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
 /////////////////////////////////////////////////////////////
 
     ////// Supporting functions  //////
-    function removeButtonStyle(parentElement) {
+    function klRemoveButtonStyle(parentElement) {
         tinyMCE.DOM.removeClass(parentElement, 'btn');
         tinyMCE.DOM.removeClass(parentElement, 'btn-primary');
         tinyMCE.DOM.removeClass(parentElement, 'btn-info');
@@ -1998,7 +2032,7 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
         tinyMCE.DOM.removeClass(parentElement, 'btn-inverse');
         tinyMCE.DOM.removeClass(parentElement, 'btn-link');
     }
-    function removeButtonSize(parentElement) {
+    function klRemoveButtonSize(parentElement) {
         tinyMCE.DOM.removeClass(parentElement, 'btn');
         tinyMCE.DOM.removeClass(parentElement, 'btn-large');
         tinyMCE.DOM.removeClass(parentElement, 'btn-small');
@@ -2006,26 +2040,26 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
     }
 
     ////// On Ready/Click functions  //////
-    function customButtonsReady() {
+    function klCustomButtonsReady() {
         var myClass, parentElement;
         $('.kl_custom_button_style').unbind("click").click(function (e) {
             e.preventDefault();
             myClass = $(this).attr('rel');
             parentElement = tinyMCE.activeEditor.dom.getParent(tinyMCE.activeEditor.selection.getNode(), 'a');
-            removeButtonStyle(parentElement);
+            klRemoveButtonStyle(parentElement);
             tinyMCE.DOM.addClass(parentElement, myClass);
         });
         $('.kl_custom_button_size').unbind("click").click(function (e) {
             e.preventDefault();
             myClass = $(this).attr('rel');
             parentElement = tinyMCE.activeEditor.dom.getParent(tinyMCE.activeEditor.selection.getNode(), 'a');
-            removeButtonSize(parentElement);
+            klRemoveButtonSize(parentElement);
             tinyMCE.DOM.addClass(parentElement, myClass);
         });
     }
 
     ////// Custom Tools Accordion tab setup  //////
-    function customButtons() {
+    function klCustomButtons() {
         var addAccordionSection = '<h3 class="kl_wiki">' +
             'Buttons' +
             '    <a class="help pull-right kl_tools_help" data-tooltip=\'{"tooltipClass":"popover right", "position":"right"}\'' +
@@ -2069,7 +2103,7 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
             '   </div>' +
             '</div>';
         $('#kl_tools_accordion').append(addAccordionSection);
-        customButtonsReady();
+        klCustomButtonsReady();
     }
 
 /////////////////////////////////////////////////////////////
@@ -2077,9 +2111,9 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
 ///////////////////////////////////////////////////////////// 
 
     ////// Supporting functions  //////
-    function initializeElementColorPicker(inputName, attribute) {
+    function klInitializeElementColorPicker(inputName, attribute) {
         var chosenColor = '',
-            // startingColor = kl_getColor($(iframeID).contents().find(targetElement), attribute),
+            // startingColor = klGetColor($(iframeID).contents().find(targetElement), attribute),
             bgHex,
             textColor;
         $(inputName).spectrum({
@@ -2113,14 +2147,14 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
     }
 
     ////// On Ready/Click functions  //////
-    function colorsReady() {
+    function klColorsReady() {
         $('.defaultSkin table.mceLayout .mceStatusbar div').show();
         $('.defaultSkin table.mceLayout .mceStatusbar div').closest('tr').addClass('kl_mce_path_wrapper');
         $('#' + tinyMCE.activeEditor.id + '_path_voice').hide();
         $('#' + tinyMCE.activeEditor.id + '_path_row span:nth-of-type(2)').hide();
-        initializeElementColorPicker('#kl_selected_element_text_color', 'color');
-        initializeElementColorPicker('#kl_selected_element_bg_color', 'background-color');
-        initializeElementColorPicker('#kl_selected_element_border_color', 'border-color');
+        klInitializeElementColorPicker('#kl_selected_element_text_color', 'color');
+        klInitializeElementColorPicker('#kl_selected_element_bg_color', 'background-color');
+        klInitializeElementColorPicker('#kl_selected_element_border_color', 'border-color');
         $('.kl_remove_color').click(function (e) {
             e.preventDefault();
             tinyMCE.DOM.setStyle(tinymce.activeEditor.selection.getNode(), 'background-color', '');
@@ -2131,7 +2165,7 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
     }
 
     ////// Custom Tools Accordion tab setup  //////
-    function colors() {
+    function klColors() {
         var addAccordionSection = '<h3 class="kl_wiki">' +
             'Colors' +
             '    <a class="help pull-right kl_tools_help" data-tooltip=\'{"tooltipClass":"popover right", "position":"right"}\'' +
@@ -2180,7 +2214,7 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
             '   </div>' +
             '</div>';
         $('#kl_tools_accordion').append(addAccordionSection);
-        colorsReady();
+        klColorsReady();
     }
 
 ////////////////////////////////////////////////////////////
@@ -2188,14 +2222,14 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
 ///////////////////////////////////////////////////////////// 
 
     ////// Supporting functions  //////
-    function changeAlerts(parentElement) {
+    function klChangeAlerts(parentElement) {
         tinyMCE.DOM.removeClass(parentElement, 'alert');
         tinyMCE.DOM.removeClass(parentElement, 'alert-error');
         tinyMCE.DOM.removeClass(parentElement, 'alert-success');
         tinyMCE.DOM.removeClass(parentElement, 'alert-info');
         tinyMCE.DOM.removeClass(parentElement, 'well');
     }
-    function changeEmphasis(parentElement) {
+    function klChangeEmphasis(parentElement) {
         tinyMCE.DOM.removeClass(parentElement, 'muted');
         tinyMCE.DOM.removeClass(parentElement, 'text-warning');
         tinyMCE.DOM.removeClass(parentElement, 'text-error');
@@ -2204,7 +2238,7 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
     }
 
     ////// On Ready/Click functions  //////
-    function customHighlightsReady() {
+    function klCustomHighlightsReady() {
         var activeSection;
         //// TYPE SELECTOR ////
         $('.kl_highlight_sections a').unbind("click").click(function (e) {
@@ -2214,7 +2248,7 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
             });
             $(this).addClass('active');
             activeSection = $(this).attr('rel');
-            // scrollToElement('.custom-"+activeSection);
+            // klScrollToElement('.custom-"+activeSection);
             $('.kl_alert_section').hide();
             $('.kl_emphasis_section').hide();
             $(activeSection).show();
@@ -2245,11 +2279,11 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
             myClass = $(this).attr('rel');
             if (elementType === 'p') {
                 parentElement = tinyMCE.DOM.getParent(tinyMCE.activeEditor.selection.getNode(), 'p');
-                changeAlerts(parentElement);
+                klChangeAlerts(parentElement);
                 tinyMCE.DOM.addClass(parentElement, myClass);
             } else if (elementType === 'div') {
                 parentElement = tinyMCE.DOM.getParent(tinyMCE.activeEditor.selection.getNode(), 'div');
-                changeAlerts(parentElement);
+                klChangeAlerts(parentElement);
                 tinyMCE.DOM.addClass(parentElement, myClass);
             }
         });
@@ -2267,7 +2301,7 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
                 tinyMCE.activeEditor.focus();
                 tinyMCE.activeEditor.selection.setContent('<span class="' + myClass + '">' + tinyMCE.activeEditor.selection.getContent() + '</span>');
             } else {
-                changeEmphasis(parentElement);
+                klChangeEmphasis(parentElement);
                 tinyMCE.DOM.addClass(parentElement, myClass);
                 if (tinyMCE.DOM.getAttrib(parentElement, 'class') === 'kl_remove_span') {
                     $(iframeID).contents().find('.kl_remove_span').contents().unwrap();
@@ -2279,7 +2313,7 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
 
 
    ////// Custom Tools Accordion tab setup  //////
-    function customHighlights() {
+    function klCustomHighlights() {
         var addAccordionSection = '<h3 class="kl_wiki">' +
             'Highlights | Alerts | Emphasis' +
             '    <a class="help pull-right kl_tools_help" data-tooltip=\'{"tooltipClass":"popover right", "position":"right"}\'' +
@@ -2335,14 +2369,14 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
             '    </div>' +
             '</div>';
         $('#kl_tools_accordion').append(addAccordionSection);
-        customHighlightsReady();
+        klCustomHighlightsReady();
     }
 
 /////////////////////////////////////////////////////////////
 //  IMAGE LAYOUT TOOLS                                     //
 /////////////////////////////////////////////////////////////
     // Accessibility Checks
-    function imageToolsReady() {
+    function klImageToolsReady() {
         $('.kl_image_left').unbind("click").click(function (e) {
             e.preventDefault();
             tinyMCE.DOM.addClass(tinyMCE.activeEditor.selection.getNode(), 'kl_style_image');
@@ -2380,7 +2414,7 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
     }
 
     ////// Custom Tools Accordion tab setup  //////
-    function imageTools() {
+    function klImageTools() {
         var addAccordionSection = '<h3 class="kl_wiki">' +
             '   Image Layout Tools' +
             '       <a class="help pull-right kl_tools_help" data-tooltip=\'{"tooltipClass":"popover right", "position":"right"}\'' +
@@ -2413,14 +2447,14 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
             '   </div>' +
             '</div>';
         $('#kl_tools_accordion').append(addAccordionSection);
-        imageToolsReady();
+        klImageToolsReady();
     }
 
 /////////////////////////////////////////////////////////////
 //  NAVIGATION                                             //
 /////////////////////////////////////////////////////////////
 
-    function checkNavCount() {
+    function klCheckNavCount() {
         var navItemCount = $(iframeID).contents().find('#kl_navigation li').length;
         if (navItemCount < 4) {
             $('.kl_nav_add_item').show();
@@ -2428,7 +2462,7 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
             $('.kl_nav_add_item').hide();
         }
     }
-    function updateNavItems() {
+    function klUpdateNavItems() {
         var showHelp, displayText, linkID, tooltipText, linkIcon;
         $('#kl_nav_list_items').html('');
         showHelp = false;
@@ -2457,13 +2491,13 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
         } else {
             $('.kl_nav_help').hide();
         }
-        checkNavCount();
+        klCheckNavCount();
         $('.kl_nav_remove_list_item').unbind("click").click(function (e) {
             e.preventDefault();
             var connectedItem = $(this).attr('rel');
             $(iframeID).contents().find(connectedItem).remove();
             $(this).parent('li').remove();
-            checkNavCount();
+            klCheckNavCount();
         });
         $('#kl_nav_list_items').sortable({
             update: function () {
@@ -2472,12 +2506,12 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
                     var connectedItem = $(this).attr('rel');
                     $(iframeID).contents().find('#kl_navigation ul').append($(iframeID).contents().find('li' + connectedItem));
                 });
-                updateNavItems();
+                klUpdateNavItems();
             }
         });
         $('#kl_nav_list_items').disableSelection();
     }
-    function navItemReady() {
+    function klNavItemReady() {
         if ($(iframeID).contents().find('#kl_navigation').length > 0) {
             $('.kl_nav_add_item').html('<i class="icon-add"></i> Add Item');
         } else {
@@ -2487,8 +2521,8 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
             e.preventDefault();
             if ($(iframeID).contents().find('#kl_navigation').length > 0) {
                 $(iframeID).contents().find('#kl_navigation ul').append('<li>New Item</li>');
-                checkNavCount();
-                updateNavItems();
+                klCheckNavCount();
+                klUpdateNavItems();
             } else {
                 $('.kl_template_sections_list .kl_navigation_section').prop('checked', true).trigger('change');
                 $('.kl_nav_add_item').html('<i class="icon-add"></i> Add Item');
@@ -2496,30 +2530,30 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
         });
         $('.kl_nav_update_items').unbind("click").click(function (e) {
             e.preventDefault();
-            updateNavItems();
-            checkNavCount();
+            klUpdateNavItems();
+            klCheckNavCount();
         });
     }
-    function activateNavItemsLink() {
+    function klActivateNavItemsLink() {
         $('.kl_nav_activate_items').unbind("click").click(function (e) {
             e.preventDefault();
             $('#kl_tools_accordion').accordion({ active: 7});
         });
     }
-    function navItemCheck() {
+    function klNavItemCheck() {
         if ($('.kl_template_sections_list .kl_navigation_section').is(':checked')) {
             $('.kl_nav_activate_items').remove();
             $('.kl_navigation_section').parents('li').append('<a href="#" class="kl_nav_activate_items pull-right" data-tooltip="left" title="additional options"><i class="fa fa-cog"></i>&nbsp;</a>');
-            activateNavItemsLink();
+            klActivateNavItemsLink();
             $('.kl_navigation_color_controls').show();
-            initializeColorPicker('#kl_navigation_bg_color', '#kl_navigation', 'background-color');
-            initializeColorPicker('#kl_navigation_text_color', '#kl_navigation a', 'color');
+            klInitializeColorPicker('#kl_navigation_bg_color', '#kl_navigation', 'background-color');
+            klInitializeColorPicker('#kl_navigation_text_color', '#kl_navigation a', 'color');
         } else {
             $('.kl_nav_activate_items').remove();
             $('.kl_navigation_color_controls').hide();
         }
     }
-    function navItems() {
+    function klNavItems() {
         var addAccordionSection = '<h3 style="margin-top: 10px;">' +
             '    Navigation Items' +
             '    <a class="help pull-right kl_tools_help" data-tooltip=\'{"tooltipClass":"popover right", "position":"right"}\'' +
@@ -2564,13 +2598,13 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
             '    </div>' +
             '</div>';
         $('#kl_tools_accordion').append(addAccordionSection);
-        updateNavItems();
-        navItemReady();
+        klUpdateNavItems();
+        klNavItemReady();
         $('.kl_navigation_section').change(function () {
-            updateNavItems();
-            navItemCheck();
+            klUpdateNavItems();
+            klNavItemCheck();
         });
-        navItemCheck();
+        klNavItemCheck();
     }
 
 
@@ -2581,7 +2615,7 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
 /////////////////////////////////////////////////////////////
 
     ////// Supporting functions  //////
-    function addModal() {
+    function klAddModal() {
         if ($(iframeID).contents().find('#kl_modal').length === 0) {
             var newSectionName = 'Modal Dialog',
                 newSectionID = 'kl_modal',
@@ -2594,13 +2628,13 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
 
             tinyMCE.DOM.addClass(parentElement, 'kl_add_modal_after');
             $(iframeID).contents().find('.kl_add_modal_after').after(modalHtml);
-            scrollToElement('.kl_add_modal_after');
+            klScrollToElement('.kl_add_modal_after');
             $(iframeID).contents().find('.kl_add_modal_after').removeClass('kl_add_modal_after');
-            highlightNewElement('#kl_modal');
-            addSectionControls(newSectionName, newSectionID);
+            klHighlightNewElement('#kl_modal');
+            klAddSectionControls(newSectionName, newSectionID);
         }
     }
-    function checkTooltips() {
+    function klCheckTooltips() {
         if ($(iframeID).contents().find('.kl_tooltip_text').length > 0) {
             $('.kl_tooltip_display').show();
             if ($(iframeID).contents().find('.kl_tooltip_text').is(':visible')) {
@@ -2614,7 +2648,7 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
             $('.kl_tooltip_display').hide();
         }
     }
-    function checkPopovers() {
+    function klCheckPopovers() {
         if ($(iframeID).contents().find('.kl_popover_content').length > 0) {
             $('.kl_popover_display').show();
             if ($(iframeID).contents().find('.kl_popover_content').is(':visible')) {
@@ -2628,7 +2662,7 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
             $('.kl_popover_display').hide();
         }
     }
-    function popupDemos() {
+    function klPopupDemos() {
         $('.kl_demo_modal').unbind("click").click(function (e) {
             e.preventDefault();
             $('#kl_example_modal').dialog({
@@ -2644,7 +2678,7 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
     }
 
     ////// On Ready/Click functions  //////
-    function popupReady() {
+    function klPopupReady() {
         //// TYPE SELECTOR ////
         $('.kl_popup_sections a').unbind("click").click(function (e) {
             e.preventDefault();
@@ -2661,14 +2695,14 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
         // Modals
         $('.kl_add_modal').unbind("click").click(function (e) {
             e.preventDefault();
-            addModal();
+            klAddModal();
         });
         $('.add_modal_trigger').unbind("click").click(function (e) {
             e.preventDefault();
             tinyMCE.activeEditor.focus();
             tinyMCE.activeEditor.selection.setContent('<a href="#" class="kl_modal_toggler">' + tinyMCE.activeEditor.selection.getContent() + '</a>');
             // Check to see if modal contents already exist and add section
-            addModal();
+            klAddModal();
         });
         $('.kl_remove_modal').unbind("click").click(function (e) {
             e.preventDefault();
@@ -2693,7 +2727,7 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
             tinyMCE.DOM.addClass(parentElement, 'kl_create_tooltip');
             tinyMCE.activeEditor.selection.setContent('<a href="#" id="kl_tooltip_' + newToolTipNum + '" class="kl_tooltip_trigger">' + tinyMCE.activeEditor.selection.getContent() + '</a>');
             $(iframeID).contents().find('.kl_create_tooltip').prepend(toolTipElement).removeClass('kl_create_tooltip');
-            checkTooltips();
+            klCheckTooltips();
         });
         $('.kl_remove_tooltip').unbind("click").click(function (e) {
             var parentElement, tipContainer;
@@ -2703,17 +2737,17 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
             tipContainer = $(iframeID).contents().find('.kl_remove_tip').attr('id');
             $(iframeID).contents().find('.' + tipContainer).remove();
             $(iframeID).contents().find('.kl_remove_tip').contents().unwrap();
-            checkTooltips();
+            klCheckTooltips();
         });
         $('.kl_show_tooltips').unbind("click").click(function (e) {
             e.preventDefault();
             $(iframeID).contents().find('.kl_tooltip_text').show();
-            checkTooltips();
+            klCheckTooltips();
         });
         $('.kl_hide_tooltips').unbind("click").click(function (e) {
             e.preventDefault();
             $(iframeID).contents().find('.kl_tooltip_text').hide();
-            checkTooltips();
+            klCheckTooltips();
         });
 
         // Popovers
@@ -2728,7 +2762,7 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
             parentElement = tinyMCE.activeEditor.dom.getParent(tinyMCE.activeEditor.selection.getNode());
             tinyMCE.DOM.addClass(parentElement, 'kl_create_popover');
             $(iframeID).contents().find('.kl_create_popover').prepend(PopoverElement).removeClass('kl_create_popover');
-            checkPopovers();
+            klCheckPopovers();
         });
         $('.kl_remove_popover').unbind("click").click(function (e) {
             var parentElement, popoverContainer;
@@ -2738,17 +2772,17 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
             popoverContainer = $(iframeID).contents().find('.kl_remove_tip').attr('id');
             $(iframeID).contents().find('.' + popoverContainer).remove();
             $(iframeID).contents().find('.kl_remove_tip').contents().unwrap();
-            checkPopovers();
+            klCheckPopovers();
         });
         $('.kl_show_popovers').unbind("click").click(function (e) {
             e.preventDefault();
             $(iframeID).contents().find('.kl_popover_content').show();
-            checkPopovers();
+            klCheckPopovers();
         });
         $('.kl_hide_popovers').unbind("click").click(function (e) {
             e.preventDefault();
             $(iframeID).contents().find('.kl_popover_content').hide();
-            checkPopovers();
+            klCheckPopovers();
         });
         // Read More
         $('.kl_add_read_more').unbind("click").click(function (e) {
@@ -2765,7 +2799,7 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
     }
 
     ////// Custom Tools Accordion tab setup  //////
-    function popupContent() {
+    function klPopupContent() {
         var addAccordionSection = '<h3 class="kl_wiki">' +
             'Popup Content | Read More' +
             '    <a class="help pull-right kl_tools_help" data-tooltip=\'{"tooltipClass":"popover right", "position":"right"}\'' +
@@ -2880,10 +2914,10 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
             '</div>' +
             '</div>';
         $('#kl_tools_accordion').append(addAccordionSection);
-        popupReady();
-        popupDemos();
-        checkTooltips();
-        checkPopovers();
+        klPopupReady();
+        klPopupDemos();
+        klCheckTooltips();
+        klCheckPopovers();
     }
 
 /////////////////////////////////////////////////////////////
@@ -2891,7 +2925,7 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
 /////////////////////////////////////////////////////////////
 
    ////// Supporting functions  //////
-    function deleteProgressBar() {
+    function klDeleteProgressBar() {
         $('.kl_progress_bar_delete').unbind("click").click(function (e) {
             e.preventDefault();
             $(iframeID).contents().find('#kl_progress_bar').remove();
@@ -2901,26 +2935,26 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
             $('#kl_progress_bar_controls').hide();
         });
     }
-    function updateProgressBarSectionWidth(connectedSection, newWidth) {
+    function klUpdateProgressBarSectionWidth(connectedSection, newWidth) {
         if (newWidth !== '') {
             $('.kl_progress_bar_width[rel="' + connectedSection + '"]').attr('placeholder', newWidth);
             $(iframeID).contents().find('.' + connectedSection + '_value').css('width', newWidth + '%').removeAttr('data-mce-style');
         }
     }
-    function bindWidthUpdate() {
+    function klBindWidthUpdate() {
         // create a new section if return/enter is pressed in the new section field
         $('.kl_progress_bar_width').keydown(function (event) {
             if (event.keyCode === 13) {
                 event.preventDefault();
                 var connectedSection = $(this).attr('rel'),
                     newWidth = $(this).val();
-                updateProgressBarSectionWidth(connectedSection, newWidth);
+                klUpdateProgressBarSectionWidth(connectedSection, newWidth);
                 $('.kl_progress_bar_width').val('');
                 return false;
             }
         });
     }
-    function pbLabelsInside() {
+    function klPbLabelsInside() {
         if ($(iframeID).contents().find('.kl_progress_bar_wrapper_outside_labels').length > 0) {
             $(iframeID).contents().find('.kl_progress_bar_wrapper_outside_labels .kl_progress_bar_label').each(function () {
                 var connectedSection = $(this).attr('rel');
@@ -2931,7 +2965,7 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
             $(iframeID).contents().find('.kl_progress_bar_label').show().removeAttr('data-mce-style');
         }
     }
-    function pbLabelsOutside() {
+    function klPbLabelsOutside() {
         if ($(iframeID).contents().find('.kl_progress_bar_wrapper_outside_labels').length === 0) {
             // Duplicate the progress bar
             $(iframeID).contents().find('.kl_progress_bar_wrapper').clone().appendTo($(iframeID).contents().find('#kl_progress_bar'));
@@ -2950,19 +2984,19 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
             $('.kl_progress_bar_label_position:eq(1)').addClass('active');
         }
     }
-    function pbLabelsCheck() {
+    function klPbLabelsCheck() {
         if ($('.kl_progress_bar_label_position:eq(2)').hasClass('active')) {
             $(iframeID).contents().find('.kl_progress_bar_label').each(function () {
                 if ($(this).html() === '&nbsp;') {
                     $(this).html('Label&nbsp;');
                 }
             });
-            pbLabelsInside();
+            klPbLabelsInside();
         }
     }
-    function addProgressBar() {
+    function klAddProgressBar() {
         var progressBarHtml, newSectionName, newSectionID, pbHeight;
-        templateCheck();
+        klTemplateCheck();
         if ($(iframeID).contents().find('#kl_progress_bar').length === 0) {
             newSectionName = 'Progress Bar';
             newSectionID = 'kl_progress_bar';
@@ -2972,23 +3006,23 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
                 '   </div>' +
                 '</div>';
             $(iframeID).contents().find('#kl_wrapper').prepend(progressBarHtml);
-            addSectionControls(newSectionName, newSectionID);
+            klAddSectionControls(newSectionName, newSectionID);
             $('#kl_progress_bar_controls').show();
-            initializeColorPicker('#kl_progress_bar_section_0_bg_color', '.kl_progress_bar_wrapper  .kl_progress_bar_0_value', 'background-color');
-            initializeColorPicker('#kl_progress_bar_section_0_text_color', '.kl_progress_bar_0_label', 'color');
+            klInitializeColorPicker('#kl_progress_bar_section_0_bg_color', '.kl_progress_bar_wrapper  .kl_progress_bar_0_value', 'background-color');
+            klInitializeColorPicker('#kl_progress_bar_section_0_text_color', '.kl_progress_bar_0_label', 'color');
             // $('#kl_progress_bar_width').val('').attr('placeholder', '20');
             pbHeight = $(iframeID).contents().find('.kl_progress_bar_value').css('height');
             $('.kl_progress_bar_height.active').removeClass('active');
             $('.kl_progress_bar_height[rel="' + pbHeight + '"]').addClass('active');
             $('#kl_progress_bar_controls').show();
-            bindWidthUpdate();
+            klBindWidthUpdate();
             setTimeout(function () {
                 $('.kl_progress_bar_label_position[rel="outside"]').trigger('click');
             }, 300);
         }
-        scrollToElement('#kl_progress_bar');
+        klScrollToElement('#kl_progress_bar');
     }
-    function bindProgressBarDelete() {
+    function klBindProgressBarDelete() {
 
         $('.kl_progress_bar_delete_section').unbind("click").click(function (e) {
             e.preventDefault();
@@ -2999,7 +3033,7 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
             $('.kl_progress_bar_delete_section').last().show();
         });
     }
-    function addProgressBarSection() {
+    function klAddProgressBarSection() {
         var newBarSectionNum = $(iframeID).contents().find('.kl_progress_bar_wrapper .kl_progress_bar_value').length,
             newBarSectionHtml = '<div class="kl_progress_bar_value kl_progress_bar_' + newBarSectionNum + '_value" style="width: 20%; background: #003366; text-align: right; height:5px; float:left;">' +
                 '<div class="kl_progress_bar_label kl_progress_bar_' + newBarSectionNum + '_label" rel="kl_progress_bar_' + newBarSectionNum + '" style="color: #fff;">Label&nbsp;</div>' +
@@ -3014,33 +3048,33 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
                 '</tr>';
         $('#kl_progress_bar_section_controls tbody').append(newSectionControls);
         $(iframeID).contents().find('.kl_progress_bar_wrapper').append(newBarSectionHtml);
-        bindProgressBarDelete();
+        klBindProgressBarDelete();
         if ($(iframeID).contents().find('.kl_progress_bar_wrapper_outside_labels').length > 0) {
-            pbLabelsInside();
-            pbLabelsOutside();
+            klPbLabelsInside();
+            klPbLabelsOutside();
         }
-        initializeColorPicker('#kl_progress_bar_section_' + newBarSectionNum + '_bg_color', '.kl_progress_bar_wrapper .kl_progress_bar_' + newBarSectionNum + '_value', 'background-color');
-        initializeColorPicker('#kl_progress_bar_section_' + newBarSectionNum + '_text_color', '.kl_progress_bar_' + newBarSectionNum + '_label', 'color');
-        bindWidthUpdate();
+        klInitializeColorPicker('#kl_progress_bar_section_' + newBarSectionNum + '_bg_color', '.kl_progress_bar_wrapper .kl_progress_bar_' + newBarSectionNum + '_value', 'background-color');
+        klInitializeColorPicker('#kl_progress_bar_section_' + newBarSectionNum + '_text_color', '.kl_progress_bar_' + newBarSectionNum + '_label', 'color');
+        klBindWidthUpdate();
         $('.kl_progress_bar_delete_section').hide();
         $('.kl_progress_bar_delete_section').last().show();
     }
-    function changePbHeight(newHeight) {
+    function klChangePbHeight(newHeight) {
         $(iframeID).contents().find('.kl_progress_bar_wrapper .kl_progress_bar_value').css('height', newHeight).removeAttr('data-mce-style');
         if (newHeight !== '20px') {
-            pbLabelsOutside();
+            klPbLabelsOutside();
             $('.kl_progress_bar_label_position:eq(0)').addClass('disabled').removeClass('active');
         } else {
             $('.kl_progress_bar_label_position:eq(0)').removeClass('disabled');
         }
     }
-    function identifyProgressBar() {
+    function klIdentifyProgressBar() {
         var barWidth, pbHeight;
         if ($(iframeID).contents().find('.kl_progress_bar_value').length > 0) {
             $('#kl_progress_bar_controls').show();
             $('.kl_progress_bar_add').hide();
-            initializeColorPicker('#kl_progress_bar_section_0_bg_color', '.kl_progress_bar_wrapper .kl_progress_bar_0_value', 'background-color');
-            initializeColorPicker('#kl_progress_bar_section_0_text_color', '.kl_progress_bar_0_label', 'color');
+            klInitializeColorPicker('#kl_progress_bar_section_0_bg_color', '.kl_progress_bar_wrapper .kl_progress_bar_0_value', 'background-color');
+            klInitializeColorPicker('#kl_progress_bar_section_0_text_color', '.kl_progress_bar_0_label', 'color');
             barWidth = Math.round(100 * parseFloat($(iframeID).contents().find('.kl_progress_bar_wrapper .kl_progress_bar_0_value').css('width')) / parseFloat($(iframeID).contents().find('.kl_progress_bar_wrapper .kl_progress_bar_0_value').parent().css('width')));
             $('.kl_progress_bar_width').val('').attr('placeholder', barWidth);
             $('#kl_progress_bar_controls').show();
@@ -3059,8 +3093,8 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
                         '   <td><input type="text" id="kl_progress_bar_section_' + index + '_text_color"></td>' +
                         '</tr>';
                     $('#kl_progress_bar_section_controls tbody').append(newSectionControls);
-                    initializeColorPicker('#kl_progress_bar_section_' + index + '_bg_color', '.kl_progress_bar_wrapper .kl_progress_bar_' + index + '_value', 'background-color');
-                    initializeColorPicker('#kl_progress_bar_section_' + index + '_text_color', '.kl_progress_bar_' + index + '_label', 'color');
+                    klInitializeColorPicker('#kl_progress_bar_section_' + index + '_bg_color', '.kl_progress_bar_wrapper .kl_progress_bar_' + index + '_value', 'background-color');
+                    klInitializeColorPicker('#kl_progress_bar_section_' + index + '_text_color', '.kl_progress_bar_' + index + '_label', 'color');
                 }
             });
             if ($(iframeID).contents().find('.kl_progress_bar_wrapper_outside_labels').length > 0) {
@@ -3075,33 +3109,33 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
             $('.kl_progress_bar_height.active').removeClass('active');
             $('.kl_progress_bar_height[rel="' + pbHeight + '"]').addClass('active');
             $('.kl_progress_bar_delete_section').last().show();
-            bindWidthUpdate();
-            bindProgressBarDelete();
+            klBindWidthUpdate();
+            klBindProgressBarDelete();
         }
     }
    ////// On Ready/Click functions  //////
-    function progressBarReady() {
+    function klProgressBarReady() {
         $('.kl_progress_bar_add').unbind("click").click(function (e) {
             e.preventDefault();
-            addProgressBar();
+            klAddProgressBar();
             $(this).hide();
         });
         $('.kl_progress_bar_add_section').unbind("click").click(function (e) {
             e.preventDefault();
-            addProgressBarSection();
+            klAddProgressBarSection();
         });
         $('.kl_progress_bar_label_position').unbind("click").click(function (e) {
             e.preventDefault();
-            addProgressBar();
+            klAddProgressBar();
             var pbPosition = $(this).attr('rel');
             if (pbPosition === 'inside') {
-                pbLabelsCheck();
-                pbLabelsInside();
+                klPbLabelsCheck();
+                klPbLabelsInside();
             } else if (pbPosition === 'outside') {
-                pbLabelsCheck();
-                pbLabelsOutside();
+                klPbLabelsCheck();
+                klPbLabelsOutside();
             } else {
-                pbLabelsInside();
+                klPbLabelsInside();
                 $(iframeID).contents().find('.kl_progress_bar_label').html('&nbsp;').removeAttr('data-mce-style');
             }
             $('.kl_progress_bar_label_position.active').removeClass('active');
@@ -3109,11 +3143,11 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
         });
         $('.kl_progress_bar_height').unbind("click").click(function (e) {
             e.preventDefault();
-            addProgressBar();
+            klAddProgressBar();
             var pbHeight = $(this).attr('rel');
             $('.kl_progress_bar_height.active').removeClass('active');
             $(this).addClass('active');
-            changePbHeight(pbHeight);
+            klChangePbHeight(pbHeight);
         });
         if ($(iframeID).contents().find('#kl_progress_bar').length > 0) {
             var barWidth = Math.round(100 * parseFloat($(iframeID).contents().find('.kl_progress_bar_value').css('width')) / parseFloat($(iframeID).contents().find('.kl_progress_bar_value').parent().css('width')));
@@ -3121,13 +3155,13 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
             $('#kl_progress_bar_width').val('').attr('placeholder', barWidth);
             $('.kl_progress_bar_colors').show();
         }
-        deleteProgressBar();
-        bindWidthUpdate();
-        identifyProgressBar();
+        klDeleteProgressBar();
+        klBindWidthUpdate();
+        klIdentifyProgressBar();
     }
 
     ////// Custom Tools Accordion tab setup  //////
-    function progressBar() {
+    function klProgressBar() {
         var addAccordionSection = '<h3 class="kl_wiki">' +
             'Progress Bar' +
             '    <a class="help pull-right kl_tools_help" data-tooltip=\'{"tooltipClass":"popover right", "position":"right"}\'' +
@@ -3188,7 +3222,7 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
             '   </div>' +
             '</div>';
         $('#kl_tools_accordion').append(addAccordionSection);
-        progressBarReady();
+        klProgressBarReady();
     }
 
 /////////////////////////////////////////////////////////////
@@ -3196,7 +3230,7 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
 /////////////////////////////////////////////////////////////
 
     ////// Supporting functions  //////
-    function identifyQuestions(quickCheckNum) {
+    function klIdentifyQuestions(quickCheckNum) {
         var answerText, newClass, thisIsCorrect, connectedAnswer, connectedSection;
         $('#' + quickCheckNum + '_sort').html('');
         $(iframeID).contents().find('#' + quickCheckNum + ' .kl_quick_check_answer_wrapper').each(function (i) {
@@ -3230,7 +3264,7 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
                     connectedSection.appendTo($(iframeID).contents().find('#' + quickCheckNum + ' .kl_quick_check_answers'));
                 });
                 $('#' + quickCheckNum + '_sort').html('');
-                identifyQuickChecks();
+                klIdentifyQuickChecks();
             }
         });
         $('#' + quickCheckNum + '_sort').disableSelection();
@@ -3244,16 +3278,16 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
             $('#kl_quick_check_two_remove').show();
             $('.kl_quick_check_two_controls').show();
         }
-        bindHover();
+        klBindHover();
     }
     // Identify any quickchecks
-    function identifyQuickChecks() {
+    function klIdentifyQuickChecks() {
         var connectedAnswer, connectedSection, quickCheckNum;
         if ($(iframeID).contents().find('.kl_quick_check').length > 0) {
             $(iframeID).contents().find('.kl_quick_check').each(function () {
                 // Get the quickcheck number
                 quickCheckNum = $(this).attr('id');
-                identifyQuestions(quickCheckNum);
+                klIdentifyQuestions(quickCheckNum);
             });
         }
         $('.kl_quick_check_mark_correct').unbind("click").click(function (e) {
@@ -3266,7 +3300,7 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
             } else {
                 $(iframeID).contents().find(connectedSection).find('.kl_quick_check_correct_answer').removeClass('kl_quick_check_correct_answer');
                 $(iframeID).contents().find(connectedAnswer).addClass('kl_quick_check_correct_answer');
-                $(this).parents('.kl_sections_li').find('.kl_quick_check_correct').removeClass('kl_quick_check_correct');
+                $(this).parents('.kl_qc_sections').find('.kl_quick_check_correct').removeClass('kl_quick_check_correct');
                 $(this).addClass('kl_quick_check_correct');
             }
         });
@@ -3293,11 +3327,11 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
 
 
     ////// On Ready/Click functions  //////
-    function quickCheckReady() {
+    function klQuickCheckReady() {
         $('.kl_quick_check_add').unbind("click").click(function (e) {
             var quickCheckNum, quickCheckNumber, quickCheckTemplate;
             e.preventDefault();
-            templateCheck();
+            klTemplateCheck();
             quickCheckNum = $(this).attr('rel');
             quickCheckNumber = '1';
             if (quickCheckNum === 'kl_quick_check_two') {
@@ -3322,11 +3356,11 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
                 '   </div>' +
                 '</div>';
             $(iframeID).contents().find('#kl_wrapper').append(quickCheckTemplate);
-            scrollToElement('#' + quickCheckNum);
-            highlightNewElement('#' + quickCheckNum);
-            identifyQuickChecks();
-            addSectionControls('Quick Check ' + quickCheckNumber, quickCheckNum);
-            bindHover();
+            klScrollToElement('#' + quickCheckNum);
+            klHighlightNewElement('#' + quickCheckNum);
+            klIdentifyQuickChecks();
+            klAddSectionControls('Quick Check ' + quickCheckNumber, quickCheckNum);
+            klBindHover();
             $(this).hide();
         });
         $('.kl_quick_check_add_answer').unbind("click").click(function (e) {
@@ -3343,13 +3377,13 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
                 '</div>';
             $(iframeID).contents().find('#' + quickCheckNum + ' .kl_quick_check_answers').append(quickCheckAnswerContent);
             $('#' + quickCheckNum + '_sort').html('');
-            scrollToElement('#' + quickCheckNum + ' .kl_quick_check_answer:last');
-            highlightNewElement('#' + quickCheckNum + ' .kl_quick_check_answer:last');
-            identifyQuickChecks();
+            klScrollToElement('#' + quickCheckNum + ' .kl_quick_check_answer:last');
+            klHighlightNewElement('#' + quickCheckNum + ' .kl_quick_check_answer:last');
+            klIdentifyQuickChecks();
         });
         $('.kl_quick_check_update_answers').unbind("click").click(function (e) {
             e.preventDefault();
-            identifyQuickChecks();
+            klIdentifyQuickChecks();
         });
         $('.kl_quick_check_sections a').unbind("click").click(function (e) {
             e.preventDefault();
@@ -3360,12 +3394,12 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
             $($(this).attr('rel')).show();
             $(this).addClass('active');
         });
-        identifyQuickChecks();
+        klIdentifyQuickChecks();
     }
 
 
     ////// Custom Tools Accordion tab setup  //////
-    function quickCheck() {
+    function klQuickCheck() {
         var quickCheckControls = '<h3 class="kl_wiki">' +
             'Quick Check' +
             '    <a class="help pull-right kl_tools_help" data-tooltip=\'{"tooltipClass":"popover right", "position":"right"}\'' +
@@ -3389,7 +3423,7 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
             '        <a href="#" class="btn btn-mini kl_quick_check_add_answer" rel="kl_quick_check_one" data-tooltip="top" title="Add an answer to the bottom of the Quick Check"><i class="icon-add"></i>Add Answer</a>' +
             '        <a href="#" class="btn btn-mini kl_quick_check_update_answers"><i class="icon-refresh"></i> Update Answers</a>' +
             '    </div>' +
-            '    <ol id="kl_quick_check_one_sort" class="kl_sections_li unstyled" rel="#kl_quick_check_one" style="margin:10px 0;"></ol>' +
+            '    <ol id="kl_quick_check_one_sort" class="kl_qc_sections unstyled" rel="#kl_quick_check_one" style="margin:10px 0;"></ol>' +
             '    <a href="#" id="kl_quick_check_one_remove" class="btn btn-mini kl_remove kl_quick_check_remove kl_margin_bottom" rel="kl_quick_check_one" style="display:none;" data-tooltip="top" title="Click this button to remove the Quick Check section."><i class="icon-end"></i> Remove QuickCheck 1</a>' +
             '</div>' +
             '<div class="kl_quick_check_two_section_wrap" style="display:none;">' +
@@ -3399,12 +3433,12 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
             '        <a href="#" class="btn btn-mini kl_quick_check_add_answer" rel="kl_quick_check_two" data-tooltip="top" title="Add an answer to the bottom of the Quick Check"><i class="icon-add"></i>Add Answer</a>' +
             '        <a href="#" class="btn btn-mini kl_quick_check_update_answers"><i class="icon-refresh"></i> Update Answers</a>' +
             '    </div>' +
-            '    <ol id="kl_quick_check_two_sort" class="kl_sections_li unstyled" rel="#kl_quick_check_two" style="margin:10px 0;"></ol>' +
+            '    <ol id="kl_quick_check_two_sort" class="kl_qc_sections unstyled" rel="#kl_quick_check_two" style="margin:10px 0;"></ol>' +
             '    <a href="#" id="kl_quick_check_two_remove" class="btn btn-mini kl_remove kl_quick_check_remove kl_margin_bottom" rel="kl_quick_check_two" style="display:none;" data-tooltip="top" title="Click this button to remove the Quick Check section."><i class="icon-end"></i> Remove QuickCheck 2</a>' +
             '</div>' +
             '</div>';
         $('#kl_tools_accordion').append(quickCheckControls);
-        quickCheckReady();
+        klQuickCheckReady();
     }
 
 /////////////////////////////////////////////////////////////
@@ -3412,23 +3446,23 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
 /////////////////////////////////////////////////////////////
 
     ////// On Ready/Click functions  //////
-    function activateSocialMediaLink() {
+    function klActivateSocialMediaLink() {
         $('.kl_social_media_activate').unbind("click").click(function (e) {
             e.preventDefault();
             $('#kl_tools_accordion').accordion({ active: 12});
         });
     }
 
-    function socialMediaCheck() {
+    function klSocialMediaCheck() {
         if ($('.kl_social_media_section').is(':checked')) {
             $('.kl_social_media_activate').remove();
             $('.kl_social_media_section').parents('li').append('<a href="#" class="kl_social_media_activate pull-right" data-tooltip="left" title="additional options"><i class="fa fa-cog"></i>&nbsp;</a>');
-            activateSocialMediaLink();
+            klActivateSocialMediaLink();
         } else {
             $('.kl_social_media_activate').remove();
         }
     }
-    function socialMediaReady() {
+    function klSocialMediaReady() {
         $(iframeID).contents().find('#kl_social_media').find('a').each(function () {
             var smIcon = $(this).attr('class'),
                 smLink = $(this).attr('href'),
@@ -3438,10 +3472,10 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
             $('#kl_social_media_links').find('.' + smIcon).parent().next('input').val(newhref);
         });
         $('.kl_social_media_section').change(function () {
-            socialMediaCheck();
+            klSocialMediaCheck();
         });
     }
-    function updateSocialMediaLinks() {
+    function klUpdateSocialMediaLinks() {
         if ($(iframeID).contents().find('#kl_social_media').length === 0) {
             $('.kl_social_media_section').prop('checked', true).trigger('change');
         }
@@ -3459,7 +3493,7 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
     }
 
     ////// Custom Tools Accordion tab setup  //////
-    function socialMediaTool() {
+    function klSocialMediaTool() {
         var addAccordionSection = '<h3>' +
             '    Social Media Links' +
             '    <a class="help pull-right kl_tools_help" data-tooltip=\'{"tooltipClass":"popover right", "position":"right"}\'' +
@@ -3493,16 +3527,16 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
         $('#kl_tools_accordion').append(addAccordionSection);
         $('.kl_social_media_update_links').unbind("click").click(function (e) {
             e.preventDefault();
-            updateSocialMediaLinks();
+            klUpdateSocialMediaLinks();
         });
         $('.kl_social_media_input').keydown(function (event) {
             if (event.keyCode === 13) {
                 event.preventDefault();
-                updateSocialMediaLinks();
+                klUpdateSocialMediaLinks();
                 return false;
             }
         });
-        socialMediaReady();
+        klSocialMediaReady();
     }
 
 /////////////////////////////////////////////////////////////
@@ -3511,7 +3545,7 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
 
     ////// Supporting functions  //////
     // See if table already has the custom "table" class
-    function checkTable(parentTable) {
+    function klCheckTable(parentTable) {
         // Get the styles from the parent element
         var currentClass = tinyMCE.DOM.getAttrib(parentTable, 'class'),
         // If the parent already has the class, remove it otherwise add it
@@ -3522,7 +3556,7 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
         }
     }
     // Insert a table using the custom tool
-    function insertTable() {
+    function klInsertTable() {
         var numCols, numRows, toInsert, i, j;
         numCols = $('#kl_table_num_cols').val();
         if (numCols === '') {
@@ -3553,14 +3587,14 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
         tinyMCE.execCommand('mceInsertContent', false, toInsert);
     }
     // clear out all custom row styles
-    function removeRowStyle(parentRow) {
+    function klRemoveRowStyle(parentRow) {
         tinyMCE.DOM.removeClass(parentRow, 'success');
         tinyMCE.DOM.removeClass(parentRow, 'error');
         tinyMCE.DOM.removeClass(parentRow, 'warning');
         tinyMCE.DOM.removeClass(parentRow, 'info');
     }
     // clear out all custom table styles
-    function removeTableStyle(parentTable) {
+    function klRemoveTableStyle(parentTable) {
         tinyMCE.DOM.removeClass(parentTable, 'table');
         tinyMCE.DOM.removeClass(parentTable, 'table-bordered');
         tinyMCE.DOM.removeClass(parentTable, 'table-condensed');
@@ -3568,7 +3602,7 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
     }
 
     ////// On Ready/Click functions  //////
-    function tablesReady() {
+    function klTablesReady() {
         // Make the first table row headings
         $('.kl_table_add_heading').unbind("click").click(function (e) {
             var parentTable, topRow;
@@ -3587,7 +3621,7 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
             }
             // remove temp class and check to see if it has the table class
             $(iframeID).contents().find('.kl_table_mark_heading').removeClass('kl_table_mark_heading');
-            checkTable(parentTable);
+            klCheckTable(parentTable);
         });
         // Make table sortable
         $('.kl_table_make_sortable').unbind("click").click(function (e) {
@@ -3613,19 +3647,19 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
         // Insert a table using the custom tool
         $('.kl_table_insert').unbind("click").click(function (e) {
             e.preventDefault();
-            insertTable();
+            klInsertTable();
         });
         $('#kl_table_num_cols').keydown(function (e) {
             if (e.keyCode === 13) {
                 e.preventDefault();
-                insertTable();
+                klInsertTable();
                 return false;
             }
         });
         $('#kl_table_num_rows').keydown(function (e) {
             if (e.keyCode === 13) {
                 e.preventDefault();
-                insertTable();
+                klInsertTable();
                 return false;
             }
         });
@@ -3635,10 +3669,10 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
             e.preventDefault();
             parentTable = tinyMCE.activeEditor.dom.getParent(tinyMCE.activeEditor.selection.getNode(), 'table');
             parentRow = tinyMCE.activeEditor.dom.getParent(tinyMCE.activeEditor.selection.getNode(), 'tr');
-            removeRowStyle(parentRow);
+            klRemoveRowStyle(parentRow);
             rowClass = $(this).attr('rel');
             tinyMCE.DOM.addClass(parentRow, rowClass);
-            checkTable(parentTable);
+            klCheckTable(parentTable);
         });
         // Toggle between table sections
         $('.kl_table_options a').unbind("click").click(function (e) {
@@ -3658,12 +3692,12 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
             e.preventDefault();
             var myClass = $(this).attr('rel'),
                 parentTable = tinyMCE.activeEditor.dom.getParent(tinyMCE.activeEditor.selection.getNode(), 'table');
-            removeTableStyle(parentTable);
+            klRemoveTableStyle(parentTable);
             tinyMCE.DOM.addClass(parentTable, myClass);
         });
     }
    ////// Custom Tools Accordion tab setup  //////
-    function customTablesSection() {
+    function klCustomTablesSection() {
         var addAccordionSection = '<h3 class="kl_wiki">' +
             'Tables' +
             '    <a class="help pull-right kl_tools_help" data-tooltip=\'{"tooltipClass":"popover right", "position":"right"}\'' +
@@ -3746,9 +3780,9 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
             '    </div>' +
             '</div>';
         $('#kl_tools_accordion').append(addAccordionSection);
-        tablesReady();
+        klTablesReady();
     }
-    function customTablesButton() {
+    function klCustomTablesButton() {
         var tablesDialog = '<a href="#" class="btn btn-mini kl_table_dialog_trigger" style="margin-left:5px;"><i class="fa fa-table"></i> Custom Tables</a>' +
             '<div id="kl_tables_dialog" title="Custom Tables" style="display:none;">' +
             '    <div class="btn-group kl_table_options kl_option_third_wrap">' +
@@ -3830,7 +3864,7 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
             e.preventDefault();
             $('#kl_tables_dialog').dialog({ position: { my: 'right top', at: 'left top', of: '#kl_tools' }, modal: false, width: 255 });
         });
-        tablesReady();
+        klTablesReady();
     }
 
 /////////////////////////////////////////////////////////////
@@ -3838,7 +3872,7 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
 /////////////////////////////////////////////////////////////
 
     // Output category words based on which category is picked
-    function bloomsList(arrayName, targetElement) {
+    function klBloomsList(arrayName, targetElement) {
         $('#kl_blooms').html('');
         $.each(arrayName, function () {
             $('#kl_blooms').append('<a class="label label-info kl_blooms" rel="' + this + '" title="' + this + '">' + this + '</a> ');
@@ -3853,7 +3887,7 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
             }
         });
     }
-    function bloomsTaxonomy(targetSection) {
+    function klBloomsTaxonomy(targetSection) {
         var step, buttons, listInsertBtnName, bloomsButton, bloomsBoxContent, targetElement, sectionToScrollTo;
         if (targetSection === 'objectives') {
             targetElement = '#kl_objectives ol';
@@ -3894,7 +3928,7 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
                     $(this).removeClass('active');
                     $('#kl_blooms').html('');
                 } else {
-                    bloomsList(value, targetElement);
+                    klBloomsList(value, targetElement);
                     $('.kl_blooms_category').each(function () {
                         $(this).removeClass('active');
                     });
@@ -3915,7 +3949,7 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
             e.preventDefault();
             $('#kl_blooms_box').dialog({ position: { my: 'right top', at: 'left top', of: '#kl_tools' }, modal: false, width: 255 });
             if ($(iframeID).contents().find(sectionToScrollTo).length > 0) {
-                scrollToElement(sectionToScrollTo);
+                klScrollToElement(sectionToScrollTo);
             }
             $('.kl_blooms_help').slideDown();
             $('#kl_blooms_box').parent('div').find('.ui-dialog-titlebar-close').click(function () {
@@ -3940,7 +3974,7 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
 /////////////////////////////////////////////////////////////
 
     ////// On Ready/Click functions  //////
-    function changeIcon() {
+    function klChangeIcon() {
         $('.kl_icon_change').click(function () {
             var parentElement, child, currentClass, regExpMatch, newregExpMatch, step1Class, step2Class, cleanedClass, iconClass, newClass, applyIconTo;
             // Check whether applying to element or list
@@ -3997,7 +4031,7 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
         });
     }
     ////// Custom Tools Accordion tab setup  //////
-    function contentIcons() {
+    function klContentIcons() {
         var step, buttons,
             iconBox = '<div id="kl_icon_box" style="display:none;" title="Custom Icons">' +
             '<div class="btn-group-label kl_margin_bottom_small">' +
@@ -4151,11 +4185,11 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
             };
 
         $('#kl_tools').append(iconBox);
-        // changeIcon();
+        // klChangeIcon();
 
         /// ICONS ////
         // Output category words based on which category is picked
-        function contentIconList(arrayName) {
+        function klContentIconList(arrayName) {
             $('#kl_icons').html('');
             $.each(arrayName, function () {
                 $('#kl_icons').append('<a class="kl_icon_change" rel="' + this + '" title="' + this + '"><i class="' + this + '"></i></a> ');
@@ -4177,13 +4211,13 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
                     $(this).removeClass('active');
                     $('#kl_icons').html('');
                 } else {
-                    contentIconList(value);
+                    klContentIconList(value);
                     $('.kl_icon_category').each(function () {
                         $(this).removeClass('active');
                     });
                     $(this).addClass('active');
                 }
-                changeIcon();
+                klChangeIcon();
             });
         });
 
@@ -4219,13 +4253,13 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
 /////////////////////////////////////////////////////////////
 
     ////// Supporting functions  //////
-    function activateModuleListLink() {
+    function klActivateModuleListLink() {
         $('.kl_modules_activate').unbind("click").click(function (e) {
             e.preventDefault();
             $('#kl_tools_accordion').accordion({ active: 4});
         });
     }
-    function bindRemove() {
+    function klBindRemove() {
         $('.kl_modules_list_remove_item').unbind("click").click(function (e) {
             e.preventDefault();
             var connectedItem = $(this).attr('rel');
@@ -4233,8 +4267,8 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
             $(this).parent('li').remove();
         });
     }
-    function calendarSetup() {
-        function getDateDiff(date1, date2, interval) {
+    function klCalendarSetup() {
+        function klGetDateDiff(date1, date2, interval) {
             var second = 1000,
                 minute = second * 60,
                 hour = minute * 60,
@@ -4310,7 +4344,7 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
                         startDate = new Date(startDateString).getTime();
                         stopDateString = $('.kl_modules_to:eq(0)').val();
                         stopDate = new Date(stopDateString).getTime();
-                        dateDiff = getDateDiff(startDate, stopDate, 'milliseconds');
+                        dateDiff = klGetDateDiff(startDate, stopDate, 'milliseconds');
                         numModules = $('.kl_modules_from').length;
                         for (i = 1; i < numModules; i++) {
                             startDate = stopDate + 86400000;
@@ -4341,16 +4375,16 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
             });
         });
     }
-    function modListCheck() {
+    function klModListCheck() {
         if ($('.kl_modules_section').is(':checked')) {
             $('.kl_identify_section_kl_modules').remove();
             $('.kl_modules_section').parents('li').append('<a href="#" class="kl_modules_activate pull-right" data-tooltip="left" title="additional options"><i class="fa fa-cog"></i>&nbsp;</a>');
-            activateModuleListLink();
+            klActivateModuleListLink();
         } else {
             $('.kl_modules_activate').remove();
         }
     }
-    function moduleControls(moduleID, moduleTitle, isCurrent, moduleStartDate, moduleStopDate) {
+    function klModuleControls(moduleID, moduleTitle, isCurrent, moduleStartDate, moduleStopDate) {
         var markCurrent = '';
         if (isCurrent === true) {
             markCurrent = ' kl_current';
@@ -4373,7 +4407,7 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
             '</li>');
 
     }
-    function linkToFirstItemCheck() {
+    function klLinkToFirstItemCheck() {
         var firstConnectedModuleUrl, checkFirst, myhref, cleanedhref;
         if ($(iframeID).contents().find('.kl_connected_module').length > 0) {
             firstConnectedModuleUrl = $(iframeID).contents().find('.kl_connected_module:first').attr('href');
@@ -4393,7 +4427,7 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
                     $(this).attr('href', cleanedhref + '/items/first');
                     $(this).attr('data-mce-href', cleanedhref + '/items/first');
                 });
-                linkToFirstItemCheck();
+                klLinkToFirstItemCheck();
             });
             $('.kl_modules_list_link_to_module').unbind("click").click(function (e) {
                 e.preventDefault();
@@ -4403,14 +4437,14 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
                     $(this).attr('href', cleanedhref);
                     $(this).attr('data-mce-href', cleanedhref);
                 });
-                linkToFirstItemCheck();
+                klLinkToFirstItemCheck();
             });
             $('.kl_modules_list_link_controls').show();
         } else {
             $('.kl_modules_list_link_controls').hide();
         }
     }
-    function markCurrent() {
+    function klMarkCurrent() {
         $('.kl_modules_list_mark_current').unbind("click").click(function (e) {
             e.preventDefault();
             var listItem = $(this).attr('rel');
@@ -4424,7 +4458,7 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
             }
         });
     }
-    function identifyModuleList() {
+    function klIdentifyModuleList() {
         if ($(iframeID).contents().find('#kl_modules').length > 0) {
             $(iframeID).contents().find('#kl_modules li').each(function () {
                 var isCurrent, connectedItem, moduleTitle, moduleStartDate, moduleStopDate, newID;
@@ -4452,19 +4486,19 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
                 moduleStartDate = moduleStartDate.replace(' (', '').replace(' to ', '');
                 moduleStopDate = $(this).find('.kl_modules_active_stop').text();
                 moduleStopDate = moduleStopDate.replace(')', '');
-                moduleControls(connectedItem, moduleTitle, isCurrent, moduleStartDate, moduleStopDate);
+                klModuleControls(connectedItem, moduleTitle, isCurrent, moduleStartDate, moduleStopDate);
             });
             $('.kl_modules_insert').html('<i class="icon-refresh"></i> Update Modules');
-            markCurrent();
-            bindHover();
-            bindRemove();
-            linkToFirstItemCheck();
-            calendarSetup();
+            klMarkCurrent();
+            klBindHover();
+            klBindRemove();
+            klLinkToFirstItemCheck();
+            klCalendarSetup();
             $('.kl_modules_list_link_controls').show();
             $('.kl_modules_dates').show();
         }
     }
-    function insertModuleList() {
+    function klInsertModuleList() {
         $(iframeID).contents().find('#kl_modules').html('<div id="#kl_modules" />');
         $(iframeID).contents().find('#kl_modules').load('/courses/' + coursenum + '/modules #context_modules', function () {
             $('#kl_modules_list_controls').html('');
@@ -4473,7 +4507,7 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
                     moduleTitle = $(this).attr('aria-label'),
                     moduleUrl = $(this).attr('data-module-url');
                 $(this).html('<li id="kl_item_' + moduleID + '" class="icon-standards"><a href="' + moduleUrl + '" id="' + moduleID + '" class="kl_connected_module">' + moduleTitle + '</a></li>');
-                moduleControls('kl_item_' + moduleID, moduleTitle, false, '', '');
+                klModuleControls('kl_item_' + moduleID, moduleTitle, false, '', '');
             });
             $(iframeID).contents().find('.custom-tabs').attr('id", "moduleTabs');
             $(iframeID).contents().find('#context_modules').wrap('<ul>');
@@ -4482,16 +4516,16 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
             $('.kl_modules_insert').html('<i class="icon-refresh"></i> Update Modules');
             $('.kl_modules_dates').show();
             $('.kl_modules_list_link_controls').show();
-            markCurrent();
-            bindRemove();
-            linkToFirstItemCheck();
-            calendarSetup();
+            klMarkCurrent();
+            klBindRemove();
+            klLinkToFirstItemCheck();
+            klCalendarSetup();
         });
-        bindHover();
+        klBindHover();
     }
 
     //// On Ready/Click functions  //////
-    function moduleListToolReady() {
+    function klModuleListToolReady() {
         // Module List
         $('.kl_modules_insert').unbind("click").click(function (e) {
             e.preventDefault();
@@ -4499,13 +4533,13 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
         });
         $('.kl_modules_section').change(function () {
             if ($(this).is(':checked')) {
-                insertModuleList();
-                modListCheck();
-                activateModuleListLink();
+                klInsertModuleList();
+                klModListCheck();
+                klActivateModuleListLink();
             } else {
                 $('.kl_modules_activate').remove();
             }
-            modListCheck();
+            klModListCheck();
         });
         if ($(iframeID).contents().find('.kl_modules_quick_links').length > 0) {
             $('.kl_modules_quick_links_current').addClass('active');
@@ -4552,10 +4586,10 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
             $(iframeID).contents().find('#kl_modules').removeClass('kl_modules_columns_4 kl_modules_columns_3 kl_modules_columns_1').addClass(columnNum);
             $(this).addClass('active');
         });
-        identifyModuleList();
+        klIdentifyModuleList();
     }
     ////// Custom Tools Accordion tab setup  //////
-    function moduleListTool() {
+    function klModuleListTool() {
         var addAccordionSection = '<h3>' +
             '    Module List' +
             '    <a class="help pull-right kl_tools_help" data-tooltip=\'{"tooltipClass":"popover right", "position":"right"}\'' +
@@ -4611,7 +4645,7 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
             '    </div>' +
             '</div>';
         $('#kl_tools_accordion').append(addAccordionSection);
-        moduleListToolReady();
+        klModuleListToolReady();
         $(iframeID).contents().find('.custom-accordion h3').each(function () {
             $(this).find('a').contents().unwrap();
         });
@@ -4625,7 +4659,7 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
 //  Section that introduces tools                          //
 ///////////////////////////////////////////////////////////// 
 
-    function aboutCustomTools() {
+    function klAboutCustomTools() {
         var addAccordionSection = '<h3 class="kl_wiki" style="margin-top: 10px;">' +
             '   About Custom Tools' +
             '</h3>' +
@@ -4643,7 +4677,7 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
 ///////////////////////////////////////////////////////////// 
 
     // Control whether or not to add policies on save
-    function insertPolicies() {
+    function klInsertPolicies() {
         var policies = 'Policies need to be updated in the tools template course.';
         $.post(klApiToolsPath + 'getPage.php', { courseID: klToolsVariables.klToolTemplatesCourseID, pageUrl: 'policies-and-procedures' })
             .done(function (data) {
@@ -4659,7 +4693,7 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
         });
     }
 
-    function syllabusReady() {
+    function klSyllabusReady() {
         // Insert notice about policies below the content editor
         if ($('#kl_syllabus_policy_notice').length === 0) {
             $('.form-actions').before('<div id="kl_syllabus_policy_notice" style="font-size:16px;">' +
@@ -4674,7 +4708,7 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
             } else {
                 $('.kl_syllabus_policies_no').addClass('active');
             }
-            insertPolicies();
+            klInsertPolicies();
         }
         $('#kl_syllabus_policy_notice a').unbind("click").click(function (e) {
             e.preventDefault();
@@ -4705,34 +4739,34 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
     }
     ////// SYLLABUS SUBSECTIONS //////
     // If the checked section exists, move it, if not add it
-    function checkSyllabusSubSection(sectionName, sectionParent, sectionArray) {
+    function klCheckSyllabusSubSection(sectionName, sectionParent, sectionArray) {
         var container = $(iframeID).contents().find('#' + sectionParent);
         if ($('.' + sectionName + '_section').is(':checked')) {
             if ($(iframeID).contents().find('.' + sectionName).length > 0) {
                 $(iframeID).contents().find('.' + sectionName).appendTo(container).removeClass('kl_to_remove');
-                checkRemove();
+                klCheckRemove();
             } else {
                 $(iframeID).contents().find('#' + sectionParent).append(sectionArray[sectionName]);
-                scrollToElement('.' + sectionName);
+                klScrollToElement('.' + sectionName);
             }
         }
     }
     // Make primary-sections-list sortable so sections can be reordered
-    function sortableSyllabusSubSections(sectionArray, sectionList, sectionParent) {
+    function klSortableSyllabusSubSections(sectionArray, sectionList, sectionParent) {
         $(sectionList).sortable({
             update: function () {
                 // Add the basic template style if one is not already set
-                templateCheck();
+                klTemplateCheck();
                 // loop through the checked sections and move or add them
                 $(sectionList + ' input:checkbox').each(function () {
-                    checkSyllabusSubSection(this.value, sectionParent, sectionArray);
+                    klCheckSyllabusSubSection(this.value, sectionParent, sectionArray);
                 });
             }
         });
         $(sectionList).disableSelection();
     }
     // This function loops through existing content and then updates section controls
-    function identifySyllabusSubSections(sectionArray, sectionList, sectionParent) {
+    function klIdentifySyllabusSubSections(sectionArray, sectionList, sectionParent) {
         // for any div that does not have a class, add the text from the heading as the class
         $(iframeID).contents().find('#' + sectionParent + ' div:not([class])').each(function () {
             var sectionTitle = $(this).find('h4').text(),
@@ -4767,14 +4801,14 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
                 $(this).parents('li').appendTo(sectionList);
             });
         });
-        sortableSyllabusSubSections(sectionArray, sectionList, sectionParent);
+        klSortableSyllabusSubSections(sectionArray, sectionList, sectionParent);
         // Bind a change function to bring up the remove button when unchecked
         $('.kl_syllabus_custom_section').change(function () {
             if ($(this).is(':checked')) {
-                templateCheck();
+                klTemplateCheck();
             } else {
                 var targetSection = '.' + this.value;
-                markToRemove(targetSection);
+                klMarkToRemove(targetSection);
             }
         });
         // Move uncheck default items to bottom of '+sectionList+'
@@ -4784,9 +4818,9 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
 
     }
     // Create a new section using the input in the template dialog
-    function createSubSection(sectionList, sectionParent) {
+    function klCreateSubSection(sectionList, sectionParent) {
         var newSectionName, newSectionClass, newSection, newSectionControls;
-        templateCheck();
+        klTemplateCheck();
         // Check for parent section
         if ($('.' + sectionParent + '_section').not(':checked')) {
             $('.' + sectionParent + '_section').prop('checked', true).trigger('change');
@@ -4806,7 +4840,7 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
             '</div>';
         $(iframeID).contents().find('#' + sectionParent).append(newSection);
         // Put focus on new section
-        scrollToElement('.' + newSectionClass);
+        klScrollToElement('.' + newSectionClass);
         $(iframeID).contents().find('.' + newSectionClass).addClass('kl_section_hover');
         setTimeout(function () {
             $(iframeID).contents().find('.' + newSectionClass).removeClass('kl_section_hover');
@@ -4824,41 +4858,41 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
         // Bind a change function to bring up the remove button when unchecked
         $('.kl_syllabus_custom_section').change(function () {
             if ($(this).is(':checked')) {
-                templateCheck();
+                klTemplateCheck();
             } else {
                 var targetSection = '.' + this.value;
-                markToRemove(targetSection);
+                klMarkToRemove(targetSection);
             }
         });
         // Show section on hover
-        bindHover();
+        klBindHover();
     }
     ////// Syllabus Subsection On Ready/Click functions  //////
-    function syllabusSubSectionsSetup(sectionArray, sectionList, sectionParent) {
+    function klSyllabusSubSectionsSetup(sectionArray, sectionList, sectionParent) {
         setTimeout(function () {
-            identifySyllabusSubSections(sectionArray, sectionList, sectionParent);
+            klIdentifySyllabusSubSections(sectionArray, sectionList, sectionParent);
         }, 300);
         // Functions to run when a section checkbox is changed
         $(sectionList + ' input:checkbox').change(function () {
             var parentCheckbox, targetSection;
             if ($(this).is(':checked')) {
                 $(this).parents('li').find('a').hide();
-                templateCheck();
+                klTemplateCheck();
                 parentCheckbox = '.' + sectionParent + '_section';
                 if ($(parentCheckbox).is(':checked') === false) {
                     $(parentCheckbox).prop('checked', true);
                     $('.kl_template_sections_list input:checkbox:checked').each(function () {
-                        checkTemplateSection(this.value, klToolsArrays.klSyllabusPrimarySections);
+                        klCheckTemplateSection(this.value, klToolsArrays.klSyllabusPrimarySections);
                     });
                 }
 
                 $(sectionList + ' input:checkbox:checked').each(function () {
-                    checkSyllabusSubSection(this.value, sectionParent, sectionArray);
+                    klCheckSyllabusSubSection(this.value, sectionParent, sectionArray);
                 });
             } else {
                 $(this).parents('li').find('a').show();
                 targetSection = '.' + this.value;
-                markToRemove(targetSection);
+                klMarkToRemove(targetSection);
             }
             $(iframeID).contents().find('p:first').filter(function () {
                 return $.trim($(this).html()) === '&nbsp;';
@@ -4868,18 +4902,18 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
         // "+" button next to new section field
         $('#' + sectionParent + '_add_section').unbind("click").click(function (e) {
             e.preventDefault();
-            createSubSection(sectionList, sectionParent);
+            klCreateSubSection(sectionList, sectionParent);
         });
         // Button that turns selected text into a predefined section
         $(sectionList + ' .kl_syllabus_identify_subsection').unbind("click").click(function (e) {
             e.preventDefault();
             var parentCheckbox, sectionName = $(this).attr('rel');
-            templateCheck();
+            klTemplateCheck();
             parentCheckbox = '.' + sectionParent + '_section';
             if ($(parentCheckbox).is(':checked') === false) {
                 $(parentCheckbox).prop('checked', true);
                 $('.kl_template_sections_list input:checkbox:checked').each(function () {
-                    checkTemplateSection(this.value, klToolsArrays.klSyllabusPrimarySections);
+                    klCheckTemplateSection(this.value, klToolsArrays.klSyllabusPrimarySections);
                 });
             }
 
@@ -4892,13 +4926,13 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
         $('#' + sectionParent + '_new_section_name').keydown(function (event) {
             if (event.keyCode === 13) {
                 event.preventDefault();
-                createSubSection(sectionList, sectionParent);
+                klCreateSubSection(sectionList, sectionParent);
                 return false;
             }
         });
     }
     // Setup subsection panels
-    function populateSubSection(subSectionArray, sectionParent) {
+    function klPopulateSubSection(subSectionArray, sectionParent) {
         var sectionTitle, addAccordionSection, sectionList;
         sectionTitle = sectionParent.replace('kl_syllabus_', '').replace('_', ' ');
         addAccordionSection = '<h3>' + sectionTitle +
@@ -4928,19 +4962,19 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
                 '   <a html="#" class="kl_syllabus_identify_subsection kl_syllabus_identify_subsection_' + key + ' icon-collection-save" rel="' + key + '" data-tooltip="left" title="Turn selected content into <br>' + sectionTitle + ' section"> Identify ' + sectionTitle + ' section</a>' +
                 '</li>');
         });
-        syllabusSubSectionsSetup(subSectionArray, sectionList, sectionParent);
+        klSyllabusSubSectionsSetup(subSectionArray, sectionList, sectionParent);
     }
-    function addSyllabusSubsections() {
-        populateSubSection(klToolsArrays.klSyllabusInformationSubSections, 'kl_syllabus_information');
-        populateSubSection(klToolsArrays.klSyllabusOutcomesSubSections, 'kl_syllabus_outcomes');
-        populateSubSection(klToolsArrays.klSyllabusResourcesSubSections, 'kl_syllabus_resources');
-        populateSubSection(klToolsArrays.klSyllabusActivitiesSubSections, 'kl_syllabus_activities');
-        populateSubSection(klToolsArrays.klSyllabusGradesSubSections, 'kl_syllabus_grades');
-        populateSubSection(klToolsArrays.klSyllabusPoliciesSubSections, 'kl_syllabus_policies');
+    function klAddSyllabusSubsections() {
+        klPopulateSubSection(klToolsArrays.klSyllabusInformationSubSections, 'kl_syllabus_information');
+        klPopulateSubSection(klToolsArrays.klSyllabusOutcomesSubSections, 'kl_syllabus_outcomes');
+        klPopulateSubSection(klToolsArrays.klSyllabusResourcesSubSections, 'kl_syllabus_resources');
+        klPopulateSubSection(klToolsArrays.klSyllabusActivitiesSubSections, 'kl_syllabus_activities');
+        klPopulateSubSection(klToolsArrays.klSyllabusGradesSubSections, 'kl_syllabus_grades');
+        klPopulateSubSection(klToolsArrays.klSyllabusPoliciesSubSections, 'kl_syllabus_policies');
     }
 
     //////////// REMOVE SUBSECTION CONTROLS //////////////////
-    function removeSubsection() {
+    function klRemoveSubsection() {
         $('#kl_tools').append('<div class="kl_remove_sections_wrapper hide text-center">' +
             '    <a href="#" class="btn btn-danger kl_remove_sections"><i class="icon-trash"></i> Remove Section(s)</a>' +
             '    <p><strong>Warning:</strong> This will also delete any content within the section.</p>' +
@@ -4950,7 +4984,7 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
     ////// Syllabus Subsection Supporting functions  //////
     // Additional buttons/controls for various sections
     // Information Section
-    function additionalInformationControls() {
+    function klAdditionalInformationControls() {
         var informationBtns = '<div class="kl_syllabus_information_controls"><h4>Additional Contacts:</h4>' +
             '<div class="btn-group-label kl_syllabus_instructor_add_section kl_margin_bottom">' +
             '    <div class="btn-group">' +
@@ -4967,7 +5001,7 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
             '    TA' +
             '</div></div>';
         $('#kl_syllabus_information_syllabus_sections_buttons').append(informationBtns);
-        function checkContacts() {
+        function klCheckContacts() {
             if ($(iframeID).contents().find('.kl_syllabus_additional_instructor').length > 0) {
                 $('.kl_syllabus_instructor_remove').removeClass('disabled');
             } else {
@@ -4998,44 +5032,49 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
         $('.kl_syllabus_instructor_add').unbind("click").click(function (e) {
             e.preventDefault();
             $(iframeID).contents().find('.kl_syllabus_instructors').append(klToolsVariables.klSyllabusAdditionalInstructor);
-            checkContacts();
+            klCheckContacts();
         });
         $('.kl_syllabus_instructor_remove').unbind("click").click(function (e) {
             e.preventDefault();
             $(iframeID).contents().find('.kl_syllabus_additional_instructor:last').remove();
-            checkContacts();
+            klCheckContacts();
         });
         $('.kl_syllabus_teaching_assistant_add').unbind("click").click(function (e) {
             e.preventDefault();
             $(iframeID).contents().find('.kl_syllabus_teaching_assistant').append(klToolsVariables.klSyllabusAdditionalTeachingAssistant);
-            checkContacts();
+            klCheckContacts();
         });
         $('.kl_syllabus_teaching_assistant_remove').unbind("click").click(function (e) {
             e.preventDefault();
             $(iframeID).contents().find('.kl_syllabus_additional_teaching_assistant:last').remove();
-            checkContacts();
+            klCheckContacts();
         });
         $('.kl_syllabus_instructors_section').change(function () {
-            checkContacts();
+            klCheckContacts();
         });
         $('.kl_syllabus_teaching_assistant_section').change(function () {
-            checkContacts();
+            klCheckContacts();
         });
-        checkContacts();
+        klCheckContacts();
     }
     // Outcomes Section
-    function additionalOutcomesControls() {
-        var learningOutcomesBtns, ideaBox, bloomsHelp, ideaHelp;
-        function checkOutcomesBox() {
+    function klAdditionalOutcomesControls() {
+        var learningOutcomesBtns, ideaBox, bloomsHelp, ideaHelp, extraOutcomesBtn;
+        function klCheckOutcomesBox() {
             if ($('.kl_syllabus_learning_outcomes_section').is(':checked')) {
                 $('#kl_syllabus_outcomes_syllabus_sections_buttons').show();
             } else {
                 $('#kl_syllabus_outcomes_syllabus_sections_buttons').hide();
             }
         }
+        // If additional outcomes if they are set
+        if (klToolsVariables.klUseAdditionalOutcomes) {
+            extraOutcomesBtn = '<a class="btn btn-mini fa fa-book kl_idea_btn  kl_margin_bottom_small" href="#">' + klToolsVariables.klUseAdditionalOutcomesTitle + '</a>';
+        }
+        // BLOOM's Outcomes variables
         learningOutcomesBtns = '<h4>Learning Outcomes</h4>' +
             '<div class="btn-group kl_margin_bottom kl_outcome_extras">' +
-            '   <a class="btn btn-mini fa fa-book kl_idea_btn  kl_margin_bottom_small" href="#">IDEA Objectives</a>' +
+                extraOutcomesBtn +
             '</div>' +
             '<div class="btn-group-label kl_margin_bottom">Include Assessments:' +
             '   <div class="btn-group">' +
@@ -5045,89 +5084,97 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
             '</div>' +
             '<a class="btn btn-mini kl_syllabus_outcomes_add kl_margin_bottom" href="#" style="display:none" data-tooltip="top" title="Insert a new Outcome/Assessment pair into the outcomes list."><i class="fa fa-list-ul"></i> Add Outcome/Assessment Pair</a>';
         $('#kl_syllabus_outcomes_syllabus_sections_buttons').append(learningOutcomesBtns);
-        ideaBox = '<div id="kl_idea_box" style="display:none;" title="IDEA Objectives">' +
-            '<div class="<div class="btn-group-label">Insert At:' +
-            '    <div class="btn-group">' +
-            '        <a class="btn btn-mini kl_idea_new_item active" href="#" data-tooltip="top" tile="Will add a new list item to the &ldquo;Outcomes&rdquo; list.">New List Item</a>' +
-            '        <a class="btn btn-mini kl_idea_at_cursor" href="#">At Cursor</a>' +
-            '    </div>' +
-            '</div>' +
-            '<ol id="kl_idea_controls">' +
-            '    <li><a href="#" class="kl_idea_objective"><span class="kl_idea_objective_text">Gaining factual knowledge (terminology, classifications, methods, trends)</span> - IDEA Objective 1</a></li>' +
-            '    <li><a href="#" class="kl_idea_objective"><span class="kl_idea_objective_text">Learning fundamental principles, generalizations, or theories</span> - IDEA Objective 2</a></li>' +
-            '    <li><a href="#" class="kl_idea_objective"><span class="kl_idea_objective_text">Learning to Apply Course Material (to improve thinking, problem solving, and decisions)</span> - IDEA Objective 3</a></li>' +
-            '    <li><a href="#" class="kl_idea_objective"><span class="kl_idea_objective_text">Developing specific skills, competencies, and points of view needed by professionals in the field most closely related to this course</span> - IDEA Objective 4</a></li>' +
-            '    <li><a href="#" class="kl_idea_objective"><span class="kl_idea_objective_text">Acquiring skills in working with others as a member of a team</span> - IDEA Objective 5</a></li>' +
-            '    <li><a href="#" class="kl_idea_objective"><span class="kl_idea_objective_text">Developing creative capacities (writing, inventing, designing, performing in art, music, drama, etc.)</span> - IDEA Objective 6</a></li>' +
-            '    <li><a href="#" class="kl_idea_objective"><span class="kl_idea_objective_text">Gaining a broader understanding and appreciation of intellectual/cultural activity</span> - IDEA Objective 7</a></li>' +
-            '    <li><a href="#" class="kl_idea_objective"><span class="kl_idea_objective_text">Developing skill in expressing myself orally or in writing</span> - IDEA Objective 8</a></li>' +
-            '    <li><a href="#" class="kl_idea_objective"><span class="kl_idea_objective_text">Learning how to find and use resources for answering questions or solving problems</span> - IDEA Objective 9</a></li>' +
-            '    <li><a href="#" class="kl_idea_objective"><span class="kl_idea_objective_text">Developing a clearer understanding of, and commitment to, personal values</span> - IDEA Objective 10</a></li>' +
-            '    <li><a href="#" class="kl_idea_objective"><span class="kl_idea_objective_text">Learning to analyze and critically evaluate ideas, arguments, and points of view</span> - IDEA Objective 11</a></li>' +
-            '    <li><a href="#" class="kl_idea_objective"><span class="kl_idea_objective_text">Acquiring an interest in learning more by asking questions and seeking answers</span> - IDEA Objective 12</a></li>' +
-            '</ol>' +
-            '</div>';
         bloomsHelp = '<div class="well kl_blooms_help" style="padding:5px;display:none;">' +
             '    <h5>Bloom&lsquo;s Help</h5>' +
             '    <p><small><span class="text-info"><strong>Select one of the six levels</strong></span> to see a list of action verbs. <span class="text-info"><strong>Click a verb</strong></span> to insert it.</small>' +
             '    <a href="#" class="kl_close_help btn btn-mini">Close Help</a>' +
             '</div>';
-        ideaHelp = '<div class="well kl_idea_help" style="padding:5px;display:none;">' +
-            '    <h5>IDEA Objectives Help</h5>' +
-            '    <p><small>Click an objective <span class="text-info"><strong>once to expand</strong></span>. When you have found one you need <span class="text-info"><strong>click again to apply</strong></span>.</small>' +
-            '    <p><small>You can also use <span class="text-info"><strong>Tab</strong></span> and <span class="text-info"><strong>Shift+Tab</strong></span> to navigate through the objectives and <span class="text-info"><strong>Enter</strong></span> to apply.</p>' +
-            '    <a href="#" class="kl_close_help btn btn-mini">Close Help</a>' +
-            '</div>';
-        $('#kl_syllabus_outcomes_syllabus_sections_buttons').append(ideaBox + bloomsHelp + ideaHelp);
+        // Show additional outcomes if selected
+        if (klToolsVariables.klUseAdditionalOutcomes) {
+            ideaBox = '<div id="kl_idea_box" style="display:none;" title="' + klToolsVariables.klUseAdditionalOutcomesTitle + '">' +
+                '<div class="<div class="btn-group-label">Insert At:' +
+                '    <div class="btn-group">' +
+                '        <a class="btn btn-mini kl_idea_new_item active" href="#" data-tooltip="top" tile="Will add a new list item to the &ldquo;Outcomes&rdquo; list.">New List Item</a>' +
+                '        <a class="btn btn-mini kl_idea_at_cursor" href="#">At Cursor</a>' +
+                '    </div>' +
+                '</div>' +
+                '<ol id="kl_idea_controls">' +
+                '</ol>' +
+                '</div>';
+            ideaHelp = '<div class="well kl_idea_help" style="padding:5px;display:none;">' +
+                '    <h5>' + klToolsVariables.klUseAdditionalOutcomesTitle + ' Help</h5>' +
+                '    <p><small>Hover over an objective <span class="text-info"><strong> to expand</strong></span>. When you have found one you need <span class="text-info"><strong>click again to apply</strong></span>.</small>' +
+                '    <p><small>You can also use <span class="text-info"><strong>Tab</strong></span> and <span class="text-info"><strong>Shift+Tab</strong></span> to navigate through the objectives and <span class="text-info"><strong>Enter</strong></span> to apply.</p>' +
+                '    <a href="#" class="kl_close_help btn btn-mini">Close Help</a>' +
+                '</div>';
+            $('#kl_syllabus_outcomes_syllabus_sections_buttons').append(ideaBox + bloomsHelp + ideaHelp);
+            $.each(klToolsVariables.klAdditionalOutcomes, function (key, value) {
+                $('#kl_idea_controls').append('<li><a href="#" class="kl_idea_objective">' + value + '</a></li>');
+            });
+        } else {
+            $('#kl_syllabus_outcomes_syllabus_sections_buttons').append(bloomsHelp);
+        }
         $('.kl_syllabus_learning_outcomes_section').change(function () {
-            checkOutcomesBox();
+            klCheckOutcomesBox();
         });
         $('.kl_close_help').unbind("click").click(function (e) {
             e.preventDefault();
             $(this).parents('div.well').slideUp();
         });
-        checkOutcomesBox();
+        klCheckOutcomesBox();
 
         //// IDEA ////
-        // Trigger for IDEA dialog
-        $('.kl_idea_btn').unbind("click").click(function (e) {
-            e.preventDefault();
-            scrollToElement('.kl_syllabus_learning_outcomes');
-            $('#kl_idea_box').dialog({ position: { my: 'right top', at: 'left top', of: '#kl_tools' }, modal: false, width: 255 });
-            $('.kl_idea_help').slideDown();
-            $('#kl_idea_box').parent('div').find('.ui-dialog-titlebar-close').click(function () {
-                $('.kl_idea_help').slideUp();
+        if(klToolsVariables.klUseAdditionalOutcomes) {
+            // Trigger for IDEA dialog
+            $('.kl_idea_btn').unbind("click").click(function (e) {
+                e.preventDefault();
+                klScrollToElement('.kl_syllabus_learning_outcomes');
+                $('#kl_idea_box').dialog({ position: { my: 'right top', at: 'left top', of: '#kl_tools' }, modal: false, width: 255 });
+                $('.kl_idea_help').slideDown();
+                $('#kl_idea_box').parent('div').find('.ui-dialog-titlebar-close').click(function () {
+                    $('.kl_idea_help').slideUp();
+                });
             });
-        });
-        // Selection Hover
-        $('.kl_idea_objective').unbind("click").click(function (e) {
-            e.preventDefault();
-            var selectedObjective = $(this).find('.kl_idea_objective_text').text();
-            if ($(this).hasClass('kl_idea_expand')) {
-                if ($('.kl_idea_new_item').hasClass('active')) {
-                    $(iframeID).contents().find('.kl_syllabus_learning_outcomes ul').append('<li>' + selectedObjective + ' </li>');
-                } else {
-                    tinyMCE.execCommand('mceInsertContent', false, selectedObjective + ' ');
+            // Selection Hover
+            $('.kl_idea_objective').unbind("click").click(function (e) {
+                e.preventDefault();
+                var selectedObjective = $(this).find('.kl_additional_outcome_text').text();
+                if ($(this).hasClass('kl_idea_expand')) {
+                    if ($('.kl_idea_new_item').hasClass('active')) {
+                        $(iframeID).contents().find('.kl_syllabus_learning_outcomes ul').append('<li>' + selectedObjective + ' </li>');
+                    } else {
+                        tinyMCE.execCommand('mceInsertContent', false, selectedObjective + ' ');
+                    }
                 }
-            }
-            $(this).focus();
-        });
-        $('.kl_idea_objective').focus(function () {
-            $('.kl_idea_expand').removeClass('kl_idea_expand');
-            $(this).addClass('kl_idea_expand');
-        });
-        // Determine whether word is inserted as a new item or at the cursor position
-        $('.kl_idea_new_item').unbind("click").click(function (e) {
-            e.preventDefault();
-            $(this).addClass('active');
-            $('.kl_idea_at_cursor').removeClass('active');
-        });
-        $('.kl_idea_at_cursor').unbind("click").click(function (e) {
-            e.preventDefault();
-            $(this).addClass('active');
-            $('.kl_idea_new_item').removeClass('active');
-        });
-        // Close IDEA help
+                $(this).focus();
+            });
+            $('.kl_idea_objective').focus(function () {
+                $('.kl_idea_expand').removeClass('kl_idea_expand');
+                $(this).addClass('kl_idea_expand');
+            });
+            $('.kl_idea_objective').mouseover(function () {
+                var el = $(this),
+                    timeoutID = setTimeout(function () {
+                        $('.kl_idea_expand').removeClass('kl_idea_expand');
+                        el.addClass('kl_idea_expand');
+                        klScrollToElement('#' + connectedSection);
+                    }, 500);
+                el.mouseout(function () {
+                    clearTimeout(timeoutID);
+                });
+            });
+            // Determine whether word is inserted as a new item or at the cursor position
+            $('.kl_idea_new_item').unbind("click").click(function (e) {
+                e.preventDefault();
+                $(this).addClass('active');
+                $('.kl_idea_at_cursor').removeClass('active');
+            });
+            $('.kl_idea_at_cursor').unbind("click").click(function (e) {
+                e.preventDefault();
+                $(this).addClass('active');
+                $('.kl_idea_new_item').removeClass('active');
+            });
+        } // Close IDEA help
         // Check whether to include assessment in list or not
         $('.kl_syllabus_outcomes_assessments_yes').unbind("click").click(function (e) {
             e.preventDefault();
@@ -5162,7 +5209,7 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
         // Add Outcomes/Assessment button
         $('.kl_syllabus_outcomes_add').unbind("click").click(function (e) {
             e.preventDefault();
-            scrollToElement('.kl_syllabus_learning_outcomes ul');
+            klScrollToElement('.kl_syllabus_learning_outcomes ul');
             $(iframeID).contents().find('.kl_syllabus_learning_outcomes ul').first().append('<li>Outcome</li>' +
                 '<ul class="kl_outcomes_assessment_list">' +
                 '    <li>Assessment Tools: </li>' +
@@ -5171,9 +5218,9 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
     }
 
     // Grades Section
-    function additionalGradesControls() {
+    function klAdditionalGradesControls() {
         // supporting functions
-        function checkComponent() {
+        function klCheckComponent() {
             if ($('.kl_syllabus_course_assignments_section').is(':checked')) {
                 $('.kl_grades_component_points_controls').show();
             } else {
@@ -5189,7 +5236,7 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
             }
         }
         // This function will pull the grade scheme from Canvas if it is checked otherwise it will give a message
-        function getGradeScheme() {
+        function klGetGradeScheme() {
             $('.kl_grade_scheme_alert').html('<i class="fa fa-spinner fa-spin"></i> Checking Canvas grade scheme');
             $(iframeID).contents().find('#kl_syllabus_canvas_grade_scheme').load('/courses/' + coursenum + '/settings #course_grading_standard_enabled', function () {
                 if ($(iframeID).contents().find('#course_grading_standard_enabled').is(':checked') === true) {
@@ -5241,13 +5288,13 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
         $('.kl_syllabus_grade_scheme_section').change(function () {
             if ($(this).is(':checked')) {
                 $('.kl_grade_scheme_controls').show();
-                getGradeScheme();
+                klGetGradeScheme();
             } else {
                 $('.kl_grade_scheme_controls').hide();
             }
         });
         $('.kl_grade_scheme_update').click(function () {
-            getGradeScheme();
+            klGetGradeScheme();
         });
 
         // Course Assignments
@@ -5292,14 +5339,14 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
             } else {
                 $('.kl_grades_component_points_controls').hide();
             }
-            checkComponent();
+            klCheckComponent();
         });
-        checkComponent();
+        klCheckComponent();
     }
 
     ////////// HELP SECTIONS /////////////
     // Create help dialogs for each section
-    function sectionHelp() {
+    function klSectionHelp() {
         var informationHelp = '<div id="kl_syllabus_information_dialog" data-turn-into-dialog=\'{"width":800,"modal":true}\' style="display:none" title="Information help">' +
             '    <p>Provide the following in the Information portion of your syllabus:</p>' +
             '    <h4>Course</h4>' +
@@ -5434,21 +5481,21 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
             $('#' + key + '_syllabus_sections_buttons').after(value);
         });
     }
-    function additionalSubSectionSetup() {
-        additionalInformationControls();
-        additionalOutcomesControls();
-        additionalGradesControls();
-        sectionHelp();
+    function klAdditionalSubSectionSetup() {
+        klAdditionalInformationControls();
+        klAdditionalOutcomesControls();
+        klAdditionalGradesControls();
+        klSectionHelp();
     }
-    function syllabusTools() {
-        syllabusReady();
-        addSyllabusSubsections();
-        removeSubsection();
+    function klSyllabusTools() {
+        klSyllabusReady();
+        klAddSyllabusSubsections();
+        klRemoveSubsection();
         setTimeout(function () {
-            additionalSubSectionSetup();
-            bloomsTaxonomy('outcomes');
-            bindHover();
-            // tablesReady(mceInstance);
+            klAdditionalSubSectionSetup();
+            klBloomsTaxonomy('outcomes');
+            klBindHover();
+            // klTablesReady(mceInstance);
         }, 300);
     }
 
@@ -5456,7 +5503,7 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
 //  API FUNCTIONS                                          //
 ///////////////////////////////////////////////////////////// 
 
-    function importPageContentThisCourse() {
+    function klImportPageContentThisCourse() {
         $('#kl_existing_pages').html($('#pages_tab_panel .wiki_pages').clone());
         $('#kl_existing_pages .wiki_pages').removeClass('wiki_pages page_list').addClass('kl_existing_page_links');
         $('.kl_existing_page_links li').each(function () {
@@ -5477,12 +5524,11 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
                     $('.kl_loading i').remove();
                     $('.kl_loading').removeClass('kl_loading');
                     sectionsPanelDefault = true;
-                    updateContentCheck();
-                    setupMainTools();
+                    klSetupMainTools();
                 });
         });
     }
-    function checkPageTemplates() {
+    function klCheckPageTemplates() {
         $('#kl_course_template_pages').html('<i class="fa fa-spinner fa-spin"></i> Checking for template pages');
         $.post(klApiToolsPath + 'checkTemplates.php', { courseID: coursenum })
             .done(function (data) {
@@ -5495,8 +5541,7 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
                             $(iframeID).contents().find('body').html(data);
                             $('.kl_import_primary_template i').attr('class', 'fa fa-clipboard');
                             sectionsPanelDefault = true;
-                            updateContentCheck();
-                            setupMainTools();
+                            klSetupMainTools();
                         });
                 });
                 $('.kl_import_secondary_template').unbind("click").click(function (e) {
@@ -5507,13 +5552,12 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
                             $(iframeID).contents().find('body').html(data);
                             $('.kl_import_secondary_template i').attr('class', 'fa fa-clipboard');
                             sectionsPanelDefault = true;
-                            updateContentCheck();
-                            setupMainTools();
+                            klSetupMainTools();
                         });
                 });
             });
     }
-    function importPageContentUrl() {
+    function klImportPageContentUrl() {
         var pastedUrl, sourceCourseNum, pageTitleUrl;
         // Clear quick check
         $('.kl_quick_check_remove').trigger('click');
@@ -5541,21 +5585,21 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
                 $(iframeID).contents().find('body').html(data);
                 $('#kl_get_existing i').attr('class', 'fa fa-files-o');
                 sectionsPanelDefault = true;
-                setupMainTools();
+                klSetupMainTools();
             });
     }
-    function bindAPIImportsTriggers() {
+    function klBindAPIImportsTriggers() {
         // Pasted url
         $('#kl_page_url').keydown(function (event) {
             if (event.keyCode === 13) {
                 event.preventDefault();
-                importPageContentUrl();
+                klImportPageContentUrl();
                 return false;
             }
         });
         $('#kl_get_existing').unbind("click").click(function (e) {
             e.preventDefault();
-            importPageContentUrl();
+            klImportPageContentUrl();
         });
     }
 
@@ -5565,7 +5609,7 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
 ///////////////////////////////////////////////////////////// 
 
     // Custom Tools side panel setup
-    function createToolsWrapper() {
+    function klCreateToolsWrapper() {
         var visualBlocksButtons = '<div class="btn-group-label kl_margin_bottom kl_view_options">' +
             '   <span>Editor View: </span>' +
             '   <div class="btn-group kl_mce_editor_view">' +
@@ -5574,8 +5618,11 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
             '   </div>' +
             '   <a href="#" class="btn btn-mini kl_mce_preview" rel="">Preview</a>' +
             '</div>',
-            removeEmptyButton = '<a class="btn btn-mini kl_remove_empty" href="#" data-tooltip="left" title="This button will clean up the page contents by removing any empty elements.' +
-            '<p>This is especially useful when using the <i class=\'icon-collection-save\'></i> feature.</p>"><i class="icon-trash"></i> Clear Empty Elements</a>',
+            klCleanUpButtons = '<div class="btn-group">' +
+            '   <a class="btn btn-mini kl_remove_empty" href="#" data-tooltip="left" title="This button will clean up the page contents by removing any empty elements.' +
+            '       This is especially useful when using the <i class=\'icon-collection-save\'></i> feature."><i class="icon-trash"></i> Clear Empty Elements</a>' +
+            '   <a class="btn btn-mini kl_unwrap" href="#" data-tooltip="top" title="Remove the tag that wraps the selected element"><i class="fa fa-code"></i> Unwrap Selected</a>' +
+            '</div>',
             tabNavigation = '<ul>' +
             '   <li><a href="#canvas_tools" class="kl_tools_tab">Canvas Tools</a></li>' +
             '   <li><a href="#kl_tools" id="toolsTrigger" class="kl_tools_tab">Custom Tools</a></li>' +
@@ -5592,15 +5639,15 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
             $('#kl_tools_wrapper').append('<div id="kl_tools" />').prepend(tabNavigation);
             $('#kl_tools_wrapper').tabs({active: 1});
         }
-        $('#kl_tools').html(visualBlocksButtons + customAccordionDiv + removeEmptyButton);
+        $('#kl_tools').html(visualBlocksButtons + customAccordionDiv + klCleanUpButtons);
         $('#toolsTrigger').click(function (e) {
             e.preventDefault();
             $('a:contains("HTML Editor")').get(0).scrollIntoView();
         });
-        bindHover();
+        klBindHover();
     }
     // Create an accordion in right panel after tools are added
-    function initializeToolsAccordion() {
+    function klInitializeToolsAccordion() {
         var icons, numSections, activeSection;
         icons = {
             header: 'ui-icon-triangle-1-e',
@@ -5632,86 +5679,84 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
             $('#kl_tools_accordion').accordion({ active: 1});
         });
     }
-    function delayedLoad() {
+    function klDelayedLoad() {
         // Some aspects need to make sure the mceEditor has time to load
         setTimeout(function () {
             if ($(iframeID).length > 0) {
-                addStyletoIframe();
+                klAddStyletoIframe();
                 $('a:contains("HTML Editor")').get(0).scrollIntoView();
-                customCSSCheck();
-                displayTypes();
-                setDisplay();
+                klCustomCSSCheck();
+                klDisplayTypes();
+                klSetDisplay();
             }
         }, 300);
     }
     // Setup Pages Tools
-    function setupMainTools() {
+    function klSetupMainTools() {
         // Add the tools section in the right panel if it doesn't exist
         // if ($('#kl_tools_accordion').length === 0) {
-        createToolsWrapper();
+        klCreateToolsWrapper();
 
         // Add tools for kl_tools_accordion
-        themeTool();
-        sectionsTool(klToolsArrays.klPagesSections);
+        klThemeTool();
+        klSectionsTool(klToolsArrays.klPagesSections);
         // Typical front page
-        navItems();
-        moduleListTool();
-        socialMediaTool();
+        klNavItems();
+        klModuleListTool();
+        klSocialMediaTool();
         // Other tools
-        accessibilityTools();
-        accordionTabsTool();
-        advancedListsTool();
-        bordersAndSpacingTool();
-        customButtons();
-        colors();
-        customHighlights();
-        imageTools();
-        popupContent();
-        progressBar();
-        quickCheck();
-        customTablesSection();
-        additionalAccordionSections();
-        bloomsTaxonomy('objectives');
-        contentIcons();
-        aboutCustomTools();
-        showPageTitle();
+        klAccessibilityTools();
+        klAccordionTabsTool();
+        klAdvancedListsTool();
+        klBordersAndSpacingTool();
+        klCustomButtons();
+        klColors();
+        klCustomHighlights();
+        klImageTools();
+        klPopupContent();
+        klProgressBar();
+        klQuickCheck();
+        klCustomTablesSection();
+        klAdditionalAccordionSections();
+        klBloomsTaxonomy('objectives');
+        klContentIcons();
+        klAboutCustomTools();
+        klShowPageTitle();
         // activate the accordion
-        initializeToolsAccordion();
-        delayedLoad();
+        klInitializeToolsAccordion();
+        klDelayedLoad();
         // Load JavaScript file that will clean up old format
-        updateContentCheck();
-        removeEmpty();
-        bindHover();
+        klCleanUp();
+        klBindHover();
         $('.kl_add_tools').remove();
 
-        checkPageTemplates();
-        importPageContentThisCourse();
+        klCheckPageTemplates();
+        klImportPageContentThisCourse();
         setTimeout(function () {
-            bindAPIImportsTriggers();
+            klBindAPIImportsTriggers();
             // Load additional content from canvasGlobal.js if needed
-            afterToolLaunch();
+            klAfterToolLaunch();
         }, 300);
     }
     // Setup Syllabus Tools
     function setupSyllabusTools() {
         // Add the tools section in the right panel if it doesn't exist
-        createToolsWrapper();
+        klCreateToolsWrapper();
         // Add tools for kl_tools_accordion
-        syllabusTools();
-        sectionsTool(klToolsArrays.klSyllabusPrimarySections);
-        customTablesButton();
-        aboutCustomTools();
+        klSyllabusTools();
+        klSectionsTool(klToolsArrays.klSyllabusPrimarySections);
+        klCustomTablesButton();
+        klAboutCustomTools();
         // activate the accordion
-        initializeToolsAccordion();
+        klInitializeToolsAccordion();
         // Load JavaScript file that will clean up old format
-        delayedLoad();
-        updateContentCheck();
-        removeEmpty();
-        bindHover();
+        klDelayedLoad();
+        klCleanUp();
+        klBindHover();
         $('.kl_add_tools').remove();
     }
     // Check for TinyMCE editor and Load Tools
-    function editorExistenceCheck(toolsToLoad) {
+    function klEditorExistenceCheck(toolsToLoad) {
         var editorExists = false;
         if ($(iframeID).contents().find('#tinymce').length > 0) {
             editorExists = true;
@@ -5719,7 +5764,7 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
         if (editorExists === true) {
             setTimeout(function () {
                 if (toolsToLoad === 'wiki') {
-                    setupMainTools();
+                    klSetupMainTools();
                 } else if (toolsToLoad === 'syllabus') {
                     setupSyllabusTools();
                 }
@@ -5727,7 +5772,7 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
             return;
         }
         setTimeout(function () {
-            editorExistenceCheck(toolsToLoad);
+            klEditorExistenceCheck(toolsToLoad);
         }, 300);
     }
 
@@ -5750,7 +5795,8 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
                 }
                 $('.kl_add_tools').unbind("click").click(function (e) {
                     e.preventDefault();
-                    editorExistenceCheck(toolsToLoad);
+                    klEditorExistenceCheck(toolsToLoad);
+                    $(this).html('<i class="fa fa-spin fa-spinner"></i> Loading Tools');
                 });
             }
         }
@@ -5770,7 +5816,7 @@ klToolsArrays, vendor_legacy_normal_contrast, afterToolLaunch */
             $('#title').after('&nbsp; &nbsp;<a href="#" class="btn btn-primary kl_import_start_here"><i class="fa fa-cloud-download"></i> Import &ldquo;Start Here&rdquo; Boilerplate</a>');
             $('.kl_import_start_here').unbind("click").click(function (e) {
                 e.preventDefault();
-                $(iframeID).contents().find('body').html(klToolsVariables.startHereContent);
+                $(iframeID).contents().find('body').html(klToolsVariables.klStartHereContent);
                 $('.kl_add_tools').trigger('click');
                 $(this).remove();
             });

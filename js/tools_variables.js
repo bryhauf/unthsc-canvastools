@@ -32,12 +32,20 @@ var klToolsVariables = {
         'admin'
     ],
     // OPTIONAL: Limit tools to an array of Canvas user IDs
-    klLimitByUser: false,
+    klLimitByUser: true,
     // Change klLimitByUser to "true" to limit to users in the klUserArray array
     // klUserArray is the Canvas user ID not the SIS user ID
     klUserArray: [
-        '1234',
-        '987654'
+        '5798', //Bryan Hauf
+        '11', //Shivam Pandey
+		'12', //AZ Bashet
+		'6958', //Charles Green
+		'28', //Tim Huang
+		'5608', //Debbie Gillespie
+		'5549', //Eric Arguello
+		'5789', //Haylie Miller
+		'4019', //Russell Coyle
+		'26' //John Planz
     ],
 
 //////////////////////
@@ -128,7 +136,7 @@ var klToolsVariables = {
     common_legacy_normal_contrast: '/assets/common_legacy_normal_contrast.css?1408316151',
 
     // Institutional policies and procedures need to be included in a Canvas course with a page named "Policies and Procedures" include the Canvas course ID here
-    klToolTemplatesCourseID: '343656',
+    klToolTemplatesCourseID: '1461',
 
     // The following is the default template code for the template sections you can change icons or other aspects but do not change div ID's
     // To add a new section, set the variable with the html content and then add it to the array of section names
